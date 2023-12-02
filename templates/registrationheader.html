@@ -1,0 +1,63 @@
+{% load static %}
+<header>
+		<div class="container">
+		    <div class="row">
+                <div class="col-3">
+                    {% if user.is_authenticated and request.user.is_customer %}
+                        <a href="{% url 'customer:dashboard' %}"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="178" height="45" class="d-none d-md-block"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="62" height="45" class="d-block d-md-none"></a>
+                    {% elif not user.is_authenticated and request.user.is_customer %}
+                        <a href="{% url 'userlogin' %}"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="178" height="45" class="d-none d-md-block"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="62" height="45" class="d-block d-md-none"></a>
+                    {% elif user.is_authenticated and request.user.is_bike %}
+                        <a href="{% url 'bike:dashboard' %}"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="178" height="45" class="d-none d-md-block"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="62" height="45" class="d-block d-md-none"></a>
+                    {% elif not user.is_authenticated and request.user.is_bike %}
+                        <a href="{% url 'userlogin' %}"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="178" height="45" class="d-none d-md-block"><img src="{% static 'registration/img/kwiky_logo_final.png' %}" alt="" width="62" height="45" class="d-block d-md-none"></a>                    
+                    {% endif %}
+                </div>
+
+                <div class="col-9">
+                    <div id="social">
+                        <ul>
+                            <li><a href="#0"><i class="icon-facebook"></i></a></li>
+                            <li><a href="#0"><i class="icon-twitter"></i></a></li>
+                            <li><a href="#0"><i class="icon-google"></i></a></li>
+                            <li><a href="#0"><i class="icon-linkedin"></i></a></li>
+                            
+
+                        </ul>
+                    </div>
+                    <!-- /social -->
+					<a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a>
+					<!-- /menu button -->
+                    <nav>
+						<ul class="cd-primary-nav">
+							{% if user.is_authenticated and request.user.is_customer %}
+                                <li>Hi, {{ request.user }} | <a class="animated_link"  href="{% url 'user_logout' %}">LOGOUT</a></li>
+                                <li><a href="{% url 'customer:dashboard' %}" class="animated_link">Dashboard</a></li>
+
+                                <li><a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="animated_link">My Profile</a></li>
+                                <li><a href="{% url 'customer:category' %}" class="animated_link">Place Order</a></li>
+                                <li><a href="{% url 'customer:order_history' request.user.id %}" class="animated_link">Order History</a></li>
+                            
+                            {% elif not user.is_authenticated and request.user.is_customer %}
+                                <li><a class="btn btn-white login"  href="{% url 'userlogin' %}">LOGIN</a></li>
+                                <li><a href="{% url 'customer:category' %}" class="animated_link">Place an Order</a></li>
+                            
+                            {% elif user.is_authenticated and request.user.is_bike %}
+                                <li>Hi, {{ request.user }} | <a class="animated_link"  href="{% url 'user_logout' %}">LOGOUT</a></li>
+                                <li><a href="{% url 'bike:dashboard' %}" class="animated_link">Dashboard</a></li>
+                                <li><a href="{% url 'bike:bike_profile' request.user.profilebike.id %}" class="animated_link">My Profile</a></li>
+                                <li><a href="{% url 'bike:order_delivery' %}" class="animated_link">Orders</a></li>
+
+
+                            {% elif not user.is_authenticated and request.user.is_bike %}
+                                <li><a class="btn btn-white login"  href="{% url 'userlogin' %}">LOGIN</a></li>
+                            
+                            {% endif %}
+                        </ul>
+					</nav>
+					<!-- /menu -->
+                </div>
+            </div>
+		</div>
+		<!-- /container -->
+	</header>

@@ -1,0 +1,400 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+<style>
+
+
+    .cartbutton {
+    background-color: #352C2A;
+    
+    border: none;
+    color: white;
+    border-radius: 6px 6px;
+    padding: 12px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;}
+
+    .btn-group .button {
+        background-color: #04AA6D; /* Green */
+        border: none;
+        color: white;
+        padding: 5px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        cursor: pointer;
+        float: left;
+        height:50px;
+      }
+      
+      .btn-group .button:hover {
+        background-color: #3e8e41;
+      }
+
+
+   
+    
+    .card,
+    .card-body,
+    .card-footer {
+        display       : flex;
+        flex-direction: column;
+        align-items   : center;
+        
+    }
+    
+    .card {
+        border-radius: 0px 0px 18px 18px;
+        background   : #fff;
+        box-shadow   : 4px 4px 25px rgba(0, 0, 0, 0.4);
+        overflow     : hidden;
+        cursor       : pointer;
+        transition   : transform 0.4s;
+        font-family    : 'Montserrat', sans-serif;
+     
+        
+    }
+    
+    .card:hover {
+        transform : scale(1.05);
+        box-shadow: 4px 4px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card-image {
+        display  : block;
+        position : relative;
+        height   : 180px;
+        max-width: 100%;
+    }
+    
+    .card-image img {
+        max-height     : 100%;
+        width          : 100%;
+        background-size: cover;
+    }
+    
+    .card-body {
+        padding: 20px 28px;
+    }
+    
+    .card-body .date {
+        font-weight: bolder;
+    }
+    
+    .card-body h2 {
+        font-size: 1.8em;
+        margin   : 2px auto 12px;
+    }
+    
+    .card-body p {
+        color      : gray;
+        font-size  : 1.1em;
+        line-height: 22px;
+        text-align : center;
+    }
+    
+    .card-footer {
+        width                : 100%;
+        display              : grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        background : #352C2A;
+    }
+    
+    .card-footer .info {
+        font-size     : 0.9em;
+        padding       : 10px;
+        color         : #fff;
+        display       : flex;
+        align-items   : center;
+        flex-direction: column;
+        font-family    : 'Montserrat', sans-serif;
+        background : #352C2A;
+        border: none !important;
+    }
+    
+    .card-footer .info:last-child {
+        border: none;
+    }
+    
+    .card-footer .info .type {
+        text-transform: uppercase;
+        margin-top    : 2px;
+        font-size     : 0.8em;
+        background : #352C2A;
+    }
+    
+
+    .float-child {
+        width: 50%;
+        float: left;
+        padding: 20px;
+        border: 2px solid red;
+    }  
+   
+
+</style>
+
+{% include 'frontpage/nav2.html' %}
+
+    <!-- bredcrumb Area Start-->
+    <section class="breadcrumb-area">
+        <div class="banner-bg-img"></div>
+        <div class="banner-shape-1"><img src="{% static 'app/assets/img/banner/shape-1.png' %}" alt="img"></div>
+        <div class="banner-shape-2"><img src="{% static 'app/assets/img/banner/shape-2.png' %}" alt="img"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h3>Our Menu
+                        </h3>
+                        <h1>Menu & Payment info
+                        </h1>
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="/">Home</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bredcrumb Area End --> 
+
+    <!-- checkout area start -->
+    <div class="cart-area pd-top-120 pd-bottom-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                {% for message in messages %}
+                     <label>
+                        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+                        <div class="alert error">
+                        <span class="alertClose">X</span>
+                        <span class="alertText">{{ message }}
+                           <br class="clear"/></span>
+                        </div>
+                     </label>
+                  {% endfor %}
+
+                
+                
+                    
+                
+                    
+                    <div class="col-lg-9">
+                        <div class="order-area">
+                            <h5 class="title" style="color:#FAFAEF">OUR MENU</h5>
+                            <div class="row">
+                                {% for good in all_items %}
+                                
+                                <div class="col-md-4 col-sm-6 col-lg-3 mb-4">       
+                                 
+                                        <div class="card" style="margin-top: 11px;">
+                                            <div class="card-image">
+                                                <img src="{{ good.image.url }}" alt="{{ good.name}}">
+                                            </div>
+                                            <div class="card-body">
+
+                                                <h2 style="font-size: 22px;">{{ good.name|upper }} </h2>
+                                                
+                                                   
+
+                                                <span class="date" style="font-size: 14px; color: red;">
+                                                   <a href="{% url 'customer:add-to-cart' good.pk %}">ADD TO CART</a> 
+                                                </span>
+                                                
+                                               
+                                                
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="info">
+                                                    <div class="value">₦{{ good.price }}</div>
+                                                    <div class="type">PRICE</div>
+                                                </div>
+                                                <div class="info">
+                                                    <div class="value">{{ good.stock }}</div>
+                                                    <div class="type">QTY</div>
+                                                </div>
+                                                <div class="info">
+                                                    <div class="value">4.5</div>
+                                                    <div class="type">RATE </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                
+                                
+                                </div>
+                                      
+                                    
+                                {% endfor %}  
+                            </div>
+                        </div>              
+                    </div>
+
+           
+            
+
+             
+
+                <div class="col-lg-3">
+                                       
+                    <div class="order-area" id="element-2">
+                       
+                            <h5 class="title" style="color:#FAFAEF">YOUR ORDER</h5>
+                            {% if object is None %}
+                                <div class="order-product">
+                                
+                                
+                                </div>
+                                <ul class="amount">
+                                    <li>Subtotal<span>₦00.00</span></li>
+                                    <li class="total">Total<span>₦00.00</span></li>
+                                </ul>
+                            {% else %}
+                                {% for order_item in items_in_cart %} 
+
+                                
+                                    <div class="order-product" style="margin-bottom: -12px;">
+
+                                        
+
+
+
+
+                                        
+                                        <div class="details">
+                                            <h6>{{ order_item.item.name|upper }} | {{ order_item.item.category|upper }} <br>
+                                                <span style="color:red; font-size:12px;"> Quality: {{ order_item.quantity }} | Unit Price ₦{{ order_item.item.price }} = ₦{{ order_item.get_total_item_price|floatformat:2|intcomma }}</h6>
+                                                    <!-- 
+                                                        <div class="btn-group">
+                                                            <a hx-target="#main" class="button btn-outline-primary" hx-delete="{% url 'customer:minus-to-cart' order_item.item.pk %}"><i class="fa fa-minus"></i> MINUS</a> 
+                                                            <a hx-target="#main" class="button"  hx-post="{% url 'customer:add-to-cart' order_item.item.pk %}"><i class="fa fa-plus"></i> ADD</i></a> 
+                                                            <a hx-target="#main" class="button"  hx-delete="{% url 'customer:delete-item' order_item.item.pk %}"><i class="fa fa-trash"></i> DELETE</a> 
+                                                    
+                                                        </div>
+                                                    -->
+                                                
+                                                    
+                                                        <ul>
+                                                            <li><span>Item Price: </span> ₦{{ order_item.get_total_item_price|floatformat:2|intcomma }} </li>
+                                                            <li><span>Item With Package: </span>₦{{ order_item.get_total_item_price_with_package|floatformat:2|intcomma  }}</li>
+                                                            <li><span>Item With Package + Tax: </span>₦{{order_item.get_sub_total_tax_total|floatformat:2|intcomma }}</li>
+                                                            <li><span>Extra Item: </span>₦{{order_item.get_total_plugin|floatformat:2|intcomma }}</li>
+
+                                                            
+                                                            <strong>ADDON ITEM:</strong>
+                                                            {% for addon in order_item.addon.all %}
+                                                                <li><span>&nbsp;&nbsp;&nbsp; {{ addon.name|upper }} </span></li>
+
+                                                            {% endfor %}
+
+                                                            <strong>OTHER ITEM:</strong>
+                                                            {% for plugin in order_item.plugin.all %}
+                                                                
+                                                                <li><span>{{ plugin.item.name|upper }} | ₦{{ plugin.item.price}} </span></li>
+
+                                                            {% endfor %}
+                                                                
+                                                        </ul>
+                                                    
+                                                        <div class="quantity buttons_added">
+                                                            <a hx-target="#main" class="button"  hx-delete="{% url 'customer:minus-to-cart' order_item.item.pk %}"><input type="button" value="-" class="minus" style="color: #fff"></a>
+                                                            <input type="number" class="input-text qty text"  name="quantity" value="{{ order_item.quantity }}" style="color: #fff">
+                                                            <a hx-target="#main" class="button"  hx-post="{% url 'customer:plus-to-cart' order_item.item.pk %}"><input type="button" value="+" class="plus" style="color: #fff"></a>
+                                                            <a hx-target="#main" class="button"  hx-delete="{% url 'customer:delete-item' order_item.item.pk %}"><input type="button" value="X" class="delete" style="color: #fff"></a>
+                                                        </div>
+
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            
+                                <ul class="amount">
+                                    
+                                    <li>Item Total<span>₦{{ object.get_total_without_tax|floatformat:2|intcomma }}</span></li>
+                                    <li>Total Package<span>₦{{ object.get_total_package|floatformat:2|intcomma }}</span></li>
+
+                                    
+                                    {% with beta=object.get_total_without_tax  mega=object.get_total_package  %}
+                                        <li class="total">Item + Package:<span> ₦{{ beta|addition:mega|floatformat:2|intcomma }}</span></li>
+                                    {% endwith %}
+
+                                    {% with beta=object.get_total_without_tax  mega=object.get_total_package  %}
+                                        <li class="total">TAX Total:<span> ₦{{ beta|addition:mega|mul:0.075 }}</span></li>
+                                    {% endwith %}
+
+
+
+                                    
+                                    <li class="total">Total With Tax <span>₦{{ object.get_tax_total|floatformat:2|intcomma }}</span></li>
+                                </ul>
+                                <a class="btn btn-secondary w-100" href="{% url 'app:order-summary' %}"> PLACE ORDER</a>
+                        
+                            {% endif %}
+
+                        
+                        
+                    </div>                
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bootstrap 5 Modal Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe" />
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <div class="modal-footer d-block">
+                        <p class="float-start">Not yet account <a href="#">Sign Up</a></p>
+                        <button type="submit" class="btn btn-warning float-end">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+             
+
+
+
+
+
+
+        </div>
+    </div>
+    <!-- checkout area end -->
+
+{% endblock content %}

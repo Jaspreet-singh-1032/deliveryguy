@@ -1,0 +1,390 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+
+    <!-- search popup area start -->
+    <div class="body-overlay" id="body-overlay"></div>
+    <div class="td-search-popup" id="td-search-popup">
+        <form action="index.html" class="search-form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search.....">
+            </div>
+            <button type="submit" class="submit-btn"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <!-- //. search Popup -->
+
+   
+
+    <!-- Banner Area Start-->
+    <section class="banner-area banner-area-2">
+        <div class="banner-thumb">
+            <img src="{% static 'app/assets/img//home-3/banner-bg.png' %}" alt="img">
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h1>Located in one place during demand & runtime</h1>
+                        <form>
+                            <div class="single-input-wrap mb-0 with-btn">
+                                <input type="email" placeholder="Enter your delivery location">
+                                <button class="btn btn-base">Search your location</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Area End --> 
+    
+    <section class="offer-area pd-top-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 align-self-center d-contents">
+                    <div class="single-offer-wrap" style="background-color: var(--main-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/1.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h2>Special Deliciaus </h2>
+                            <h5>Maxican Pizza Testes Better</h5>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                        <div class="offer-sticker">
+                            <img src="{% static 'app/assets/img/offer/offer.png' %}" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="single-offer-wrap" style="background-color: var(--heading-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/2.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h3>Enjoy Our Delicious Item</h3>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                    </div>
+                    <div class="single-offer-wrap" style="background-color: #FFEECC">
+                        <div class="animated-img"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="animated-img animated-img-2"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="overlay-gradient"></div>
+                        <div class="wrap-details">
+                            <h3 class="text-heading">The Fastest In Delivery <span>Food</span></h3>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                        <img class="bg-img-2" src="assets/img/offer/3.png" alt="img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="offer-area pd-bottom-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 align-self-center d-contents">
+                    <div class="single-offer-wrap single-offer-wrap-2" style="background-color: var(--secondary-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/1.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h4>Double Cheese</h4>
+                            <h1>BURGER </h1>
+                            <p>With Free Cocacola. Stay home , we deliver</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-3" style="background-color: #000;">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/2.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h3>Enjoy 30% CashBack</h3>
+                            <span>Up to $70 on all Bikash</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-4" style="background-color: #F8F7F2;">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/3.png' %}" alt="img">
+                        <div class="wrap-details text-center">
+                            <h3><span>25 EXTRA</span>
+                                FREE ON KFC</h3>
+                            <p>Stay home , we deliver</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-5" style="background: #39251D">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/4.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h5>Test with</h5>
+                            <h3><span>JAPANESE</span>FOOD AT HOME</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+     <!-- product Area Start-->
+     <section class="product-area pd-bottom-90">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-12">
+                  <div class="section-title text-center">
+                      <h3 class="sub-title">Our Menu</h3>
+                      <h2 class="title">Delicious Deals for Delicious Meals</h2>
+                  </div>
+                  <ul class="product-nav style-2 nav nav-pills" id="pills-tab" role="tablist">
+                     {% for ct in category  %}
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link active" id="pills-{{ ct.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ ct.name }}" type="button" role="tab" aria-controls="pills-ramen" aria-selected="true"><img src="{{ ct.icon.url }}" alt="{{ ct.name }}" width='32px'>{{ ct.name|upper }}</button>
+                        </li>
+                     {% endfor %}
+
+          
+                  </ul>
+              </div>
+          </div>
+          <div class="tab-content" id="pills-tabContent">
+
+              <div class="tab-pane fade show active" id="pills-ramen" role="tabpanel" aria-labelledby="pills-ramen-tab">
+                  <div class="row justify-content-center">
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/01.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Double Burger</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/02.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Gulliver Burger</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/03.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Cheese Momos</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/04.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Patty Buns Burgers</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/05.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Margherita Pizza</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/06.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Maxican Pizza</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/07.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">Garlic Chicken Pizza</a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-xl-3 col-lg-4 col-md-6">
+                          <div class="single-item-wrap style-2">
+                              <div class="thumb">
+                                  <img src="assets/img/home-2/product/08.png" alt="img">
+                                  <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                              </div>
+                              <div class="wrap-details">
+                                  <h5><a href="single-product.html">BBQ Chicken Pizza </a></h5>
+                                  <div class="wrap-footer">
+                                      <div class="rating">
+                                          4.9
+                                          <span class="rating-inner">
+                                              <i class="ri-star-fill ps-0"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-fill"></i>
+                                              <i class="ri-star-half-line pe-0"></i>
+                                          </span>
+                                          (200)
+                                      </div>
+                                  </div> 
+                                  <div class="btn-area">
+                                      <h6 class="price">$17.00</h6>
+                                      <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                  </div>                                        
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+         
+      </div>
+  </section>
+  <!-- product Area End -->
+
+
+    {% endblock content %}

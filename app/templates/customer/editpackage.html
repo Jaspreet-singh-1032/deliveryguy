@@ -1,0 +1,170 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+   
+
+      <section class="offer-dedicated-body mt-4 mb-4 pt-2 pb-2">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-8">
+                {% for message in messages %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong> {{ message }}!</strong>.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                {% endfor %}
+                  <div class="offer-dedicated-body-left">
+                     <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-order-online" role="tabpanel" aria-labelledby="pills-order-online-tab">
+                           <div id="#menu" class="bg-white rounded shadow-sm p-4 mb-4 explore-outlets">
+                              <h5 class="mb-4">Edit Receiver Information</h5>
+                              <form class="explore-outlets-search mb-4" method="POST" enctype="multipart/form-data" novalidate="novalidate">
+                                    {% csrf_token %}
+                                  
+                                      {{ form.nature_of_goods|as_crispy_field }}
+                                      {{ form.image|as_crispy_field }}
+                                      {{ form.numbers|as_crispy_field }}
+                                      {{ form.values|as_crispy_field }}
+                                      
+                                      <a onclick="myFunction()" class="text-danger">Click To Add More Details </a><br/><br/>
+                                    
+                                      <div id="myDIV" style="display: none !important;">
+                                          {{ form.weight|as_crispy_field }}
+                                          {{ form.dimensions|as_crispy_field }}
+                                          {{ form.instruction|as_crispy_field }}
+                                    </div>
+   
+                                    <div class="input-group">
+                                    
+                                       <div class="form-group col-md-12 mb-0">
+                                          <button type="submit" class="btn btn-success btn-block btn-lg text-light">UPDATE
+                                          <i class="icofont-long-arrow-right"></i></button>       <br/><br/>
+                                       </div>
+                                 
+                                    </div>
+                              </form>
+                             
+                           </div>
+                           
+                        </div>
+                        
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                <div class="generator-bg rounded shadow-sm mb-4 p-4 osahan-cart-item">
+                  <div class="d-flex mb-4 osahan-cart-item-profile">
+                    
+                     <div class="d-flex flex-column">
+                        <h6 class="mb-1 text-white">{{ package.receiver_details.fullname|title }}
+                        </h6>
+                        <p class="mb-0 text-white"><i class="icofont-location-pin"></i> {{ package.receiver_details.deliver_address }} </p>
+                        <p class="mb-0 text-white"><i class="icofont-location-pin"></i> {{ package.receiver_details.picking_address }} </p>
+                     </div>
+                  </div>
+                  
+                 
+                  <div class="mb-2 bg-white rounded p-2 clearfix">
+                     <p class="mb-1">Delivery Distance <span class="float-right text-dark">{{ distance.distance.text }}</span></p>
+                     <p class="mb-1">Delivery Time <span class="float-right text-dark">{{ distance.duration.text }}</span></p>
+                     
+                     <p class="mb-1">Service Charges For Delivery <span class="text-info" data-toggle="tooltip" data-placement="top" title="Total discount breakup">
+                        <i class="icofont-info-circle"></i>
+                        </span> <span class="float-right text-dark">₦200.00</span>
+                     </p>
+
+
+                     
+
+                     {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_package < 1000.00 %}
+
+                     {% with alpha=1000|multiply:0.075 beta=1000 omega=200 %}
+                
+
+                         <p class="mb-1 text-success">Delivery Fee WITH VAT 
+                             
+                             <span class="float-right text-success">₦{{ alpha|addition:beta }}</span>
+                             
+                         </p>
+
+                         <hr />
+                         <h6 class="font-weight-bold mb-0">TO PAY  <span class="float-right">₦{{ alpha|addition:beta|add:omega }}</span></h6>
+                 
+                     {% endwith %}
+
+             {% else %}
+                   
+
+            
+
+       
+
+                     {% with alpha=distance.distance.text|slice:':-2'|mul:settings.distance_price_package beta=200  %}
+
+
+                      <p class="mb-1 text-info">VAT
+                        
+                         <span class="float-right text-info">₦{{ alpha|mul:0.075|floatformat:0 }}</span>
+                      </p>
+                                          
+                     <p class="mb-1 text-warning">Total Delivery
+                        
+                         <span class="float-right text-warning">₦{{ alpha|floatformat:0 }}</span>
+                     </p>
+
+                  <hr />
+                  <h6 class="font-weight-bold mb-0 text-danger">TO PAY  <span class="float-right">₦{{ alpha|mul:0.075|addition:alpha|add:beta|floatformat:2|intcomma }}</span></h6>
+                   
+                     {% endwith %}
+       
+
+             {% endif %}
+          
+                    
+
+
+                     
+                     
+                  </div>
+
+
+                
+
+                
+
+
+
+               </div>
+                <div class="pt-2"></div>
+
+               
+             </div>
+            </div>
+         </div>
+      </section>
+      
+
+<script>
+
+  function myFunction() {
+     var x = document.getElementById("myDIV");
+     if (x.style.display === "none") {
+       x.style.display = "block";
+     } else {
+       x.style.display = "none";
+     }
+   }
+
+ </script>
+
+
+{% endblock content %}

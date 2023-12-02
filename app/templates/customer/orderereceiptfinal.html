@@ -1,0 +1,131 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+
+
+
+      <section class="breadcrumb-osahan pt-5 pb-5 bg-dark position-relative text-center">
+         <h1 class="text-white">Invoice</h1>
+         <h6 class="text-white-50">Order: {{ invoice.ref_code }}</h6>
+      </section>
+      <section class="section pt-5 pb-5">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-8 mx-auto">
+                  <div class="p-5 osahan-invoice bg-white shadow-sm">
+                     <div class="row mb-5 pb-3 ">
+                        <div class="col-md-8 col-10">
+                           <h3 class="mt-0">Thanks for choosing <strong class="text-secondary"><a href="/">DeliveryGuy Service</a></strong>, {{ request.user.username|title }} ! Here are your order details: </h3>
+                           <img alt="DeliveryGuy QRCODE" src="{{ invoice.qr_image.url }}" style="width:200px;">
+                        </div>
+                        <div class="col-md-4 col-2 pl-0 text-right">
+                           <p class="mb-4 mt-2">
+                              
+                              <button class="text-primary font-weight-bold" onclick="window.print();" class="noPrint"><i class="icofont-print"></i> PRINT</button>
+
+                           </p>
+                           <img alt="DeliveryGuy" src="{% static 'web/logo.png' %}" style="width:200px;">
+                           <br/><br/><br/>
+
+                           <p class="mb-1 text-black"><strong>Delivery To:</strong></p>
+                           <p class="mb-1 text-primary"><strong>{{ invoice.user.get_full_name|title }}</strong></p>
+                           <p class="mb-1">{{  invoice.shipping_address}}
+                           </p>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-6">
+                           <p class="mb-1 text-black">Order No: <strong>{{ invoice.ref_code }}</strong></p>
+                           <p class="mb-1">Order placed at: <strong>{{ invoice.created_at }}</strong></p>
+                          
+                           {% if invoice.being_delivered == False %}
+                              <p class="mb-1">Order Status: <strong class="text-success">On Process</strong></p>
+                              <p class="mb-1">Delivery Status: <strong class="text-success">{{ invoice.mins }} mins away</strong></p>
+                              {% if inovice.taken == True %}
+                                 <p class="mb-1">Driver Info: <strong class="text-success"> Delivering by: {{ bike.get_full_name }} {{ bike.profilebike.phone_number}} </strong></p>
+                              
+                             
+
+                                   
+
+
+                              {% endif %}
+                             
+                           {% else %}
+                              <p class="mb-1">Order Status: <strong class="text-success">Completed</strong></p>
+                           {% endif %}
+                          
+
+                        </div>
+                        <div class="col-md-6">
+                          
+                        </div>
+                     </div>
+                     <div class="row mt-5">
+                        <div class="col-md-12">
+                           <p class="mb-1">Ordered from:</p>
+
+                        
+
+                              
+                              {% for order_item in invoice.items.all|slice:1 %}
+
+                                 <h6 class="mb-1 text-black"><strong>{{ order_item.item.vendor }}</strong></h6>
+                                 <p class="mb-1">{{ order_item.item.vendor.fulladdress }}</p>
+
+                              {% endfor %}
+
+                          
+
+
+                           <table class="table mt-3 mb-0">
+                              <thead class="thead-light">
+                                 <tr>
+                                    <th class="text-black font-weight-bold" scope="col">Item Name</th>
+                                    <th class="text-right text-black font-weight-bold" scope="col">Quantity</th>
+                                    <th class="text-right text-black font-weight-bold" scope="col">Price</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                                 {% for order_item in invoice.items.all  %}
+                                 
+                                 
+                                    <tr>
+                                       <td>{{ order_item.item.name }} - <span style="color: red;">{{ order_item.item.vendor.name }} <span> </td>
+                                       <td class="text-right">{{ order_item.quantity }}</td>
+                                       <td class="text-right">₦{{ order_item.get_total_item_price}} </td>
+                                    </tr>
+                                 {% endfor %}
+                                
+
+                                
+
+                                 <tr>
+                                    <td class="text-right" colspan="2">
+                                       <h6 class="text-success">Grand Total With VAT & Delivery:</h6>
+                                    </td>
+                                    <td class="text-right">
+                                       <h6 class="text-success"> ₦{{ invoice.paid_amount|floatformat:2|intcomma}} </h6> 
+                                    </td>
+                              
+                                   
+                                 </tr>
+
+                                 
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+
+
+{% endblock content %}

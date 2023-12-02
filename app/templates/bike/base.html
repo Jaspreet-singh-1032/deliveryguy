@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+      <meta name="description" content="Askbootstrap" />
+      <meta name="author" content="Askbootstrap" />
+      <title>DishAxis - Online Food Ordering Website </title>
+      <!-- Favicon Icon -->
+      <link rel="icon" type="image/png" href="{% static 'web/dishicon.png' %}">
+      <!-- Feather Icon-->
+      <link href="{% static 'myadmin/vendor/icons/feather.css' %}" rel="stylesheet" type="text/css">
+      <!-- Fontawesome Icon-->
+      <link href="{% static 'myadmin/vendor/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet" type="text/css">
+      <!-- Bootstrap Css -->
+      <link href="{% static 'myadmin/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+      <!-- Custom Css -->
+      <link href="{% static 'myadmin/css/styles.css' %}" rel="stylesheet" />
+      <!-- Datatables css -->
+      <link href="{% static 'myadmin/vendor/dataTables/dataTables/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+   </head>
+   <body class="sb-nav-fixed">
+
+
+   {% include 'bike/nav.html' %}
+
+
+    {% block content %}
+
+    {% endblock content %}
+    
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid">
+         <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; DishAxis {% now "Y" %}</div>
+            <div>
+               <a href="#">Privacy Policy</a>
+               &middot;
+               <a href="#">Terms &amp; Conditions</a>
+            </div>
+         </div>
+      </div>
+   </footer>
+</div>
+</div>
+
+ <!-- Jquery -->
+ <script src="{% static 'myadmin/vendor/jquery/jquery.min.js' %}"></script>
+ <!-- Fontawesome -->
+ <script src="{% static 'myadmin/vendor/fontawesome/js/all.min.js' %}"></script>
+ <!-- Bootstrap -->
+ <script src="{% static 'myadmin/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+ <!-- Custom Js -->
+ <script src="{% static 'myadmin/js/scripts.js' %}"></script>
+ <!-- Ajax Chart Js -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js' %}" crossorigin="anonymous"></script>
+ <!-- Chart Js -->
+ <script src="{% static 'myadmin/assets/demo/chart-area-demo.js' %}"></script>
+ <script src="{% static 'myadmin/assets/demo/chart-bar-demo.js' %}"></script>
+ <script src="{% static 'myadmin/assets/demo/chart-pie-demo.js' %}"></script>
+ <!-- Datatable Js -->
+ <script src="{% static 'myadmin/vendor/dataTables/dataTables/js/jquery.dataTables.min.js' %}"></script>
+ <script src="{% static 'myadmin/vendor/dataTables/dataTables/js/dataTables.bootstrap.min.js' %}"></script>
+ <script src="{% static 'myadmin/assets/demo/datatables-demo.js' %}"></script>
+</body>
+</html>

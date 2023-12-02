@@ -1,0 +1,83 @@
+a
+
+
+
+
+
+
+
+
+                    <div class="col-lg-9">
+                        <div class="order-area">
+                            <h5 class="title" style="color:#FAFAEF">OUR MENU</h5>
+                            <div class="row">
+                                {% for good in all_items %}
+                                
+                                <div class="col-md-4 col-sm-6 col-lg-3 mb-4">       
+                                 
+                                        <div class="card" style="margin-top: 11px;">
+                                            <div class="card-image">
+                                                <img src="{{ good.image.url }}" alt="{{ good.name}}">
+                                            </div>
+                                            <div class="card-body">
+
+                                                <h2 style="font-size: 22px;">{{ good.name|upper }} </h2>
+                                                
+                                                   
+
+                                                <span class="date" style="font-size: 14px; color: red;">
+                                                   <a href="{% url 'customer:add-to-cart' good.pk %}">ADD TO CART</a> 
+                                                </span>
+                                                
+                                               
+                                                
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="info">
+                                                    <div class="value">₦{{ good.price }}</div>
+                                                    <div class="type">PRICE</div>
+                                                </div>
+                                                <div class="info">
+                                                    <div class="value">{{ good.stock }}</div>
+                                                    <div class="type">QTY</div>
+                                                </div>
+                                                <div class="info">
+                                                    <div class="value">4.5</div>
+                                                    <div class="type">RATE </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                
+                                
+                                </div>
+
+
+                                
+                                      
+                                    
+                                {% endfor %}  
+                            </div>
+                        </div>              
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                    plugins = OrderItem.objects.filter(ordered=False, user=request.user)
+        plugin_items = plugins.plugin.all()
+        plugin_items.update(ordered=True)
+        for plugin in plugin_items:
+            plugin.save()
+            
+            
+        invoice = get_object_or_404(Order, ref_code__iexact=txref)
+        order_items = invoice.items.all()
+        order_items.update(ordered=True)
+        for item in order_items:
+            item.save()

@@ -1,0 +1,318 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+{% include 'frontpage/nav.html' %}
+
+    <!-- search popup area start -->
+    <div class="body-overlay" id="body-overlay"></div>
+    <div class="td-search-popup" id="td-search-popup">
+        <form action="/" class="search-form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search.....">
+            </div>
+            <button type="submit" class="submit-btn"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <!-- //. search Popup -->
+
+   
+
+    <!-- Banner Area Start-->
+    <section class="banner-area banner-area-2">
+        <div class="banner-thumb">
+            <img src="{% static 'app/assets/img//home-3/banner-bg.png' %}" alt="img">
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h1>Welcome To Delivery Guy<br/><span style="font-size: 24px;">...Where Tradition Takes Center Stage<span>
+                             </h1>
+                       <!-- <form>
+                            <div class="single-input-wrap mb-0 with-btn">
+                                <input type="email" placeholder="Enter your delivery location">
+                                <button class="btn btn-base">Search your location</button>
+                            </div>
+                        </form>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Area End --> 
+    
+    <section class="offer-area pd-top-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 align-self-center d-contents">
+                    <div class="single-offer-wrap" style="background-color: var(--main-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/1.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h2>Special Deliciaus </h2>
+                            <h5>Maxican Pizza Testes Better</h5>
+                            <a class="btn btn-white" href="#">ORDER NOW</a>
+                        </div>
+                        <div class="offer-sticker">
+                            <img src="{% static 'app/assets/img/offer/offer.png' %}" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="single-offer-wrap" style="background-color: var(--heading-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/2.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h3>Enjoy Our Delicious Item</h3>
+                            <a class="btn btn-white" href="#">ORDER NOW</a>
+                        </div>
+                    </div>
+                    <div class="single-offer-wrap" style="background-color: #FFEECC">
+                        <div class="animated-img"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="animated-img animated-img-2"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="overlay-gradient"></div>
+                        <div class="wrap-details">
+                            <h3 class="text-heading">Buy Delivery Package In  <span>KM</span></h3>
+                            <a class="btn btn-white" href="#">Subscrible Now</a>
+                        </div>
+                        <img class="bg-img-2" src="{% static 'app/assets/img/offer/3.png' %}" alt="img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="offer-area pd-bottom-90">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                {% for ad in advert %}
+                    
+                        <div class="col-md-12 align-self-center d-contents">
+                            <div class="single-offer-wrap single-offer-wrap-2">
+                                <a href="{{ ad.website.url }}" target="_blank">
+                                    <img class="bg-img" src="{{ ad.image.url }}" alt="{{ ad.name }}" width="1920" height="650">
+                                </a>
+                                <div class="wrap-details">
+                                    
+                                    {% if ad.caption is None  %}
+                                    <h4></h4> 
+                                    {% else %}
+                                        <h4>{{ ad.caption }}</h4>
+                                    {% endif %}
+
+                                    {% if ad.mcaption is None  %}
+                                        <h4></h4> 
+                                    {% else %}
+                                        <h1>{{ ad.mcaption }} </h1>
+                                    {% endif %}
+
+                                    {% if ad.othercaption is None  %}
+                                        <h4></h4> 
+                                    {% else %}
+                                        <p>{{ ad.othercaption }}</p>
+                                    {% endif %}
+                                        
+                                    
+                                    
+                                
+                                </div>
+                                
+                            </div>
+                        </div>
+                  
+                {% endfor %}
+
+                {% for fd in food  %}
+                    
+                 
+                        
+                    
+                        
+                        <div class="col-lg-4 col-md-6 align-self-center">
+                            <div class="single-offer-wrap single-offer-wrap-3" style="background-color: #000;">
+                                <img class="bg-img" src="{{ fd.image.url }}" alt="img">
+                                <div class="wrap-details">
+                                    <h3><a href="{% url 'app:food-general' fd.name %}">{{ fd.name|upper }}</a></h3>
+                                    <a class="btn btn-white" href="{% url 'customer:add-to-cart' fd.pk %}">ORDER NOW</a>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    
+
+                {% endfor %}
+                
+            </div>
+        </div>
+    </section>
+
+
+     <!-- product Area Start-->
+    <section class="product-area pd-bottom-90">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-12">
+                  <div class="section-title text-center">
+                      <h3 class="sub-title">Our Menu</h3>
+                      <h2 class="title">Delicious Deals for Delicious Meals</h2>
+                  </div>
+                  <ul class="product-nav style-2 nav nav-pills" id="pills-tab" role="tablist">
+                     {% for category in categories %}
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link{% if forloop.first %} active{% endif %}" id="pills-{{ category.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ category.name }}" type="button" role="tab" aria-controls="pills-ramen" aria-selected="true">{{ category.name|upper }}</button>
+                        </li>
+                     {% endfor %}
+                     
+          
+                  </ul>
+              </div>
+          </div>
+          <div class="tab-content" id="pills-tabContent">
+
+               
+         
+         
+            {% for category, goods in goods_by_category.items %}
+               <div class="tab-pane fade{% if forloop.first %} show active{% endif %}" id="pills-{{ category.name }}" role="tabpanel" aria-labelledby="pills-{{ category.name }}-tab">
+                     <div class="row justify-content-center">
+                        {% for good in goods %}
+                           <div class="col-xl-3 col-lg-4 col-md-6">
+                              <div class="single-item-wrap style-2">
+                                    <div class="thumb">
+                                       <img src="{{ good.image.url }}" alt="{{ good.name|title }}">
+                                       <!-- <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a> -->
+                                    </div>
+                                    <div class="wrap-details">
+                                       <h5><a href="{% url 'app:food-general' good.name %}">{{ good.name|title }}</a> </h5>
+                                      
+                                       <div class="btn-area">
+                                            <h6 class="price">₦{{ good.price }}</h6>
+                                            <a class="btn btn-secondary" href="{% url 'customer:add-to-cart' good.pk %}">Add to cart <i class="ri-add-line"></i></a>  
+                                            
+                                        </div>   
+                                    
+
+                                                                          
+                                    </div>
+
+
+                                 
+                              </div>
+                           </div>
+                        {% endfor %}
+                     </div>
+               </div>
+            {% endfor %}
+               
+               
+            
+            
+
+      </div>
+    </section>
+  <!-- product Area End -->
+
+
+
+    <!-- about Area Start-->
+    <section class="about-area pd-top-120 pd-bottom-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="thumb mb-lg-0 mb-4">
+                        <img src="{% static 'app/assets/img/other/about.png' %}" alt="img">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="section-title text-lg-start text-center">
+                        <h3 class="sub-title">Why choose us</h3>
+                        <h2 class="title">Why we are the best</h2>
+                        <p>A, blandit euismod ullamcorper vestibulum enim habitasse. Ultrices tincidunt scelerisque elit enim. A neque malesuada in tortor eget justo mauris nec dolor. Consequat risus vitae, ac ac et preparation. He wanted to serve burgers, fries and beverages that tasted .</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="single-about-wrap">
+                                <img src="{% static 'app/assets/img/icon/1.png' %}" alt="img">
+                                Fresh food
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-about-wrap">
+                                <img src="{% static 'app/assets/img/icon/2.png' %}" alt="img">
+                                Fast Delivery
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-about-wrap">
+                                <img src="{% static 'app/assets/img/icon/3.png' %}" alt="img">
+                                Quality Maintain
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="single-about-wrap">
+                                <img src="{% static 'app/assets/img/icon/4.png' %}" alt="img">
+                                24/7 Service
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- about Area End -->
+
+
+     <!-- blog Area Start-->
+     <section class="blog-area pd-bottom-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-5 col-lg-7">
+                    <div class="section-title text-center">
+                        <h3 class="sub-title">News & Blog</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+
+                {% for bg in blog  %}
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-blog-wrap">
+                        <div class="thumb" style="height: 461px;">
+                            <img src="{{ bg.image.url }}" alt="{{ bg.title }}" width="420" height="461px">
+                        </div>
+                        <div class="wrap-details">
+                            <span class="cat">
+                                <span class="date">
+                                    <i class="ri-calendar-todo-fill"></i>{{ bg.created_at|naturalday }}
+                                </span>
+                                <a href="#" class="tag me-0">
+                                    <i class="ri-price-tag-3-fill"></i>{{ bg.category.name|title}}
+                                </a>
+                            </span>
+                            <h5><a href="{% url 'post-detail' bg.slug %}">{{ bg.title|title }}</a></h5> 
+                            <div class="wrap-hover-area">
+                                <p> {{ bg.content|safe|truncatechars:'90'}}
+                                </p> 
+                                <a class="link-btn" href="{% url 'post-detail' bg.slug %}">Read More</a> 
+                            </div>                       
+                        </div> 
+                    </div>
+                </div>
+
+                {% endfor %}
+               
+            </div>
+        </div>
+    </section>
+    <!-- blog Area End -->
+
+
+
+    {% endblock content %}
+

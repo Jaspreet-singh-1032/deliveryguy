@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="We Devlivery across major street in Abeokuta such as Food, Grocery, Market Goods(Food Stuff)">
+    <meta name="author" content="Couone Technology Limited">
+    <title>KWIKY | ...stressless delivery</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="{% static 'registration/img/kwiky_icon.jpg' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'registration/img/kwiky_icon.jpg' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'registration/img/kwiky_icon.jpg' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'registration/img/kwiky_icon.jpg' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{% static 'registration/img/kwiky_icon.jpg' %}">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- GOOGLE WEB FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{% static 'registration/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'registration/css/menu.css' %}" rel="stylesheet">
+    <link href="{% static 'registration/css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'registration/css/vendors.css' %}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'registration/css/custom.css' %}" rel="stylesheet">
+	
+	<!-- MODERNIZR MENU -->
+	<script src="{% static 'registration/js/modernizr.js' %}"></script>
+
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+
+
+<style>
+	.btn-primary {
+		color: #fff;
+		background-color: #2955a9;
+		border-color: #2955a9;
+
+	}
+	.myspace{
+		margin-top: -50px;
+	}
+
+	.badge-primary{
+		color: #fff;
+		background-color: #2955a9;
+		border-color: #2955a9;
+
+	}
+	
+	
+</style>
+
+</head>
+
+<body>
+	
+	<div id="preloader">
+		<div data-loader="circle-side"></div>
+	</div><!-- /Preload -->
+	
+	<div id="loader_form">
+		<div data-loader="circle-side-2"></div>
+	</div><!-- /loader_form -->
+
+	
+	<!-- /Header -->
+{% block content %}
+
+{% endblock content %}
+
+<!-- /container -->
+
+<div class="container">
+    <footer id="home" class="clearfix">
+        <ul style="font-size: 9px; text-align: center;">
+            {% if user.is_authenticated and request.user.is_customer %}
+				<li>Hi, {{ request.user }} | <a class="animated_link"  href="{% url 'user_logout' %}">LOGOUT</a></li>
+				<li><a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="animated_link">My Profile</a></li>
+				<li><a href="{% url 'customer:category' %}" class="animated_link">Place Order</a></li>
+				<li><a href="{% url 'customer:order_history' request.user.id %}" class="animated_link">Order History</a></li>
+			
+			{% elif not user.is_authenticated and request.user.is_customer %}
+				<li><a class="btn btn-white login"  href="{% url 'userlogin' %}">LOGIN</a></li>
+				<li><a href="{% url 'customer:category' %}" class="animated_link">Place an Order</a></li>
+			
+			{% elif user.is_authenticated and request.user.is_bike %}
+				<li>Hi, {{ request.user }} | <a class="animated_link"  href="{% url 'user_logout' %}">LOGOUT</a></li>
+				<li><a href="{% url 'bike:bike_profile' request.user.profilebike.id %}" class="animated_link">My Profile</a></li>
+				<li><a href="{% url 'bike:order_delivery' %}" class="animated_link">Orders</a></li>
+
+			{% elif not user.is_authenticated and request.user.is_bike %}
+				<li><a class="btn btn-white login"  href="{% url 'userlogin' %}">LOGIN</a></li>
+			
+			{% endif %}
+			
+			
+        </ul>        
+		<p style="text-align: center;">©  {% now "Y" %}</p>
+
+    </footer>
+    <!-- end footer-->
+</div>
+<!-- /container -->
+
+<div class="cd-overlay-nav">
+    <span></span>
+</div>
+<!-- /cd-overlay-nav -->
+<div class="cd-overlay-content">
+    <span></span>
+</div>
+<!-- /cd-overlay-content -->
+
+	<!-- Modal terms -->
+	<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="termsLabel">Terms and conditions</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn_1" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- Modal info -->
+	<div class="modal fade" id="more-info" tabindex="-1" role="dialog" aria-labelledby="more-infoLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="more-infoLabel">Frequently asked questions</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn_1" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	
+	<!-- COMMON SCRIPTS -->
+	<script src="{% static 'registration/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'registration/js/common_scripts.min.js' %}"></script>
+	<script src="{% static 'registration/js/velocity.min.js' %}"></script>
+	<script src="{% static 'registration/js/common_functions.js' %}"></script>
+
+	<!-- Wizard script-->
+	<script src="{% static 'registration/js/func_1.js' %}"></script>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
+
+</body>
+</html>

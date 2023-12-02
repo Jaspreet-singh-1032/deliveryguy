@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div class="app-admin-views">
+    <h2>Orders Grouped by Location and Payment Status</h2>
+    <div>
+      <form method="get" action=".">
+        <select name="location" id="id_location">
+          <option value=""{% if not location_filter %} selected{% endif %}>All Locations</option>
+          {% for location in location_paid_changelist.root_queryset.values('location').distinct %}
+            <option value="{{ location.location }}"{% if location_filter == location.location %} selected{% endif %}>{{ location.location }}</option>
+          {% endfor %}
+        </select>
+        <select name="paid" id="id_paid">
+          <option value=""{% if not paid_filter %} selected{% endif %}>All Payments</option>
+          <option value="1"{% if paid_filter == '1' %} selected{% endif %}>Paid</option>
+          <option value="0"{% if paid_filter == '0' %} selected{% endif %}>Unpaid</option>
+        </select>
+        <button type="submit">Filter</button>
+      </form>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Paid</th>
+          <th>Number of Orders</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entry in location_paid_changelist.result_list %}
+          <tr>
+            <td>{{ entry.location }}</td>
+            <td>{{ entry.paid|yesno:"Yes,No" }}</td>
+            <td>{{ entry.count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,569 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+
+
+{% include 'frontpage/nav2.html' %}
+
+
+<!-- bredcrumb Area Start-->
+<section class="breadcrumb-area">
+    <div class="banner-bg-img"></div>
+    <div class="banner-shape-1"><img src="{% static 'app/assets/img/banner/shape-1.png' %}" alt="img"></div>
+    <div class="banner-shape-2"><img src="{% static 'app/assets/img/banner/shape-2.png' %}" alt="img"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 align-self-center">
+                <div class="banner-inner text-center">
+                    <h3>Order Summary
+                    </h3>
+                    <h1>ADDDRESS & PAYMENT
+                    </h1>
+                    <nav aria-label="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="/">Home</a></li>
+                          <li class="breadcrumb-item active" aria-current="page">Order Summary</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- bredcrumb Area End --> 
+
+   <!-- cart area start -->
+   <div class="cart-area pd-top-120 pd-bottom-120">
+      <div class="container">
+          <div class="row justify-content-center">
+
+                 
+
+                  {% for message in messages %}
+                     <label>
+                        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+                        <div class="alert error">
+                        <span class="alertClose">X</span>
+                        <span class="alertText">{{ message }}
+                           <br class="clear"/></span>
+                        </div>
+                     </label>
+                  {% endfor %}
+                   
+                  
+                  
+                   
+                   
+
+                  {% if object is None %}
+                     <div class="col-lg-12">
+                           <div class="table-responsive mb-4">
+                              <table class="table">
+                                 <thead>
+                                       <tr>
+                                          <th class="blank">Action</th>
+                                          <th class="title-name">Product</th>
+                                          <th>Price</th>
+                                          <th>Quantity</th>
+                                          <th>Total Price</th>
+                                       </tr>
+                                 </thead>
+                                 <tbody>
+                                       <tr>
+                                          <td class="table-close-btn"><a href="#"><i class="ri-close-line"></i></a></td>
+                                          
+                                          <td class="item-name">
+                                             <div class="details">
+                                                   <h5>No Food</h5>
+                                                
+                                             </div>
+                                          </td>
+                                          <td>₦00.00</td>
+                                          <td class="table-quantity">
+                                             <form>
+                                                   <div class="quantity buttons_added">
+                                                      <input type="button" value="-" class="minus" disabled>
+                                                      <input type="number" class="input-text qty text" step="1" min="1" max="10000" name="quantity" value="1">
+                                                      <input type="button" value="+" class="plus" disabled>
+                                                   </div>
+                                             </form>
+                                          </td>
+                                          <td>₦00.00</td>
+                                       </tr>
+                                 </tbody>
+                              </table>
+                           </div>                    
+                     </div>
+
+                  {% else %}
+
+                  
+
+                   
+
+                     <div class="col-lg-8">
+
+                        <div class="order-area">
+                           <h5 class="title" style="color: #fff">DELIVERY ADDRESS</h5>
+                        
+                       
+                            <form method="POST" id="mform" class="default-form-wrap" style="margin: 11px;" novalidate>
+
+                             
+                                <div class="row">
+                                 {% csrf_token %}
+      
+                                 <div id="locationField">
+      
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          {{ form.shipping_address|as_crispy_field }} 
+                                                                                <span id="error" style="color: red; display: none;">The address is not a valid Google address</span>
+
+                                       </div>
+
+      
+                                       <div class="col-md-6">
+                                          {{ form.location|as_crispy_field }}
+                                       </div>
+                                    </div>
+
+                                    {{ form.phone_number|as_crispy_field }}
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-check">
+                                             <input class="form-check-input" type="checkbox" name="flexRadioDefault" id="flexRadioDefault1">
+                                             <label class="form-check-label" for="flexRadioDefault1">&nbsp;&nbsp;&nbsp;Do You Want To schedule The Delivery</label>
+                                          </div>
+                                       </div>
+      
+                                       <div class="col-md-6">
+                                          <div id="scheduleContainer" style="display: none;">
+                                             {{ form.schedule|as_crispy_field }}
+                                          </div>
+                                       </div>
+      
+                                    </div>
+      
+      
+      
+                                   
+      
+      
+                                  
+      
+      
+      
+                                    
+                                    {{ form.ordernote|as_crispy_field }}
+                                    {{ form.latitude|as_crispy_field }}
+                                    {{ form.longitude|as_crispy_field }}      
+                                    
+                                 
+                                    
+                                 </div>
+      
+                               
+      
+                                 <button class="btn btn-secondary w-100"  type="submit" name="BtnUpdate">UPDATE<i class="icofont-plus"></i> </button></a>
+                                
+                              
+                              </div>
+                            </form>
+      
+      
+                          
+                        </div>
+
+
+
+                     </div>
+
+                     {% if object.shipping_address is None %}
+                        <div class="col-lg-4">
+                              <div class="order-area">
+                                
+                                    <h5 class="title" style="color: #fff">CART DETAILS</h5>
+                                    <ul class="amount">
+                                          <li>Main Food Total:<span>₦{{ get_total }}</span></li>
+                                          <li>Plugin Item Total:<span>₦{{total_plugin }}</span></li>
+                                          <li>Package Total:<span>₦{{total_package }}</span></li>
+
+                                          {% with beta=get_total  mega=total_plugin omega=total_package %}
+                                             <li class="total" style="color: red;">Total:<span> ₦{{ mega|addition:omega|addition:beta|floatformat:2|intcomma }}</span></li>
+                                          {% endwith %}  
+
+
+                                      </ul>
+                            
+                              
+                                 
+                                 <button type="button" class="btn btn-secondary w-100" disabled>Enter Address To Continue!</button>
+
+                              </div>                
+                        </div>
+
+
+                     {% else %}
+
+                        <div class="col-lg-4">
+                           <div class="order-area">
+                              
+                              <h5 class="title" style="color: #fff">DELIVERY ADDRESS</h5>
+                                 
+                                    <ul class="amount">
+                                    
+
+                                      
+
+                                       <li>Main Food Total:<span>₦{{ get_total|floatformat:2|intcomma }}</span></li>
+                                       <li>Plugin Item Total:<span>₦{{total_plugin|floatformat:2|intcomma }}</span></li>
+                                       <li>Package Total:<span>₦{{total_package|floatformat:2|intcomma }}</span></li>
+
+                                       {% if request.user.subscriber.active  %}
+                                          <li>You Subscription ({{ request.user.subscriber.package }}) is Still Valid</span></li>
+                                          <li>You are Using  {{ distance.duration.text|slice:':-4' }} KM out of {{ request.user.subscriber.package.distance|sub:request.user.subscriber.usage|floatformat:2 }} KM</span></li>
+                                             {% with beta=object.get_total_without_tax  mega=object.get_total_package  %}
+                                                <li class="total">VAT:<span> ₦{{ beta|addition:mega|mul:0.075|floatformat:2 }}</span></li>
+                                             {% endwith %}
+                                       {% else %}
+                                           
+                                          {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_food < 1000.00 %}
+                                             <li>Delivery Price:<span> ₦1,000</span></li>
+                                             <li style="font-size: 12px; color: red; marging-top: -100px;">Delivery Details: {{ distance.distance.text }}<span>{{ distance.duration.text|slice:':-4' }}mins</span></li>
+                                             
+                                             {% with beta=get_total  mega=total_plugin omega=1000 alpha=total_package %}
+                                                <li class="total">VAT:<span> ₦{{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|floatformat:2 }}</span></li>
+                                             {% endwith %}
+                                          {% else %}
+                                             <li>Delivery Price: <span>₦{{  distance.distance.text|slice:':-2'|mul:settings.distance_price_food|floatformat:2|intcomma }}</span></li>
+                                             <li style="font-size: 12px; color: red; marging-top: -100px;">Delivery Details:{{ distance.distance.text }}<span>{{ distance.duration.text|slice:':-4' }}mins</span></li>
+                                             {% with beta=get_total  mega=total_plugin omega=distance.distance.text|slice:':-2'|mul:settings.distance_price_food alpha=total_package %}
+                                                
+                                                   {% if mega == 0 and alpha == 0%}
+                                                         <li>VAT:<span> ₦{{ beta|addition:omega|addition:alpha|mul:0.075|floatformat:2|intcomma }}</span></li>
+                                                   {% else %}
+                                                         <li>VAT:<span> ₦{{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|floatformat:2|intcomma }}</span></li>
+
+                                                   {% endif %}
+                                                      
+                                             {% endwith %}
+                                          {% endif %}
+                                       {% endif %}
+
+                                      
+
+
+
+                                    </ul>
+         
+                                 
+                                      
+                                       {% if request.user.subscriber.active  %}
+                                      
+                                             {% with beta=object.get_total_without_tax|floatformat:0 mega=object.get_total_package %}
+                                                <ul class="amount">
+                                                   <li class="total">TOTAL:<span> ₦{{ beta|addition:mega|mul:0.075|addition:beta|addition:mega|intcomma }}</span></li>
+                                                </ul>
+
+                                                <form>
+                                                   <script src="https://js.paystack.co/v1/inline.js"></script>
+                                                   <button class="btn btn-secondary w-100" type="button" onclick="payWithPaystack()" id="payment-submit">MAKE PAYMENT ₦{{ beta|addition:mega|mul:0.075|addition:beta|addition:mega|intcomma  }}<i class="icofont-plus"></i> </button></a>
+                                                      
+                                                </form>
+                                             {% endwith %}
+                                             
+                                      
+                                       {% else %}
+         
+                                                {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_food < 1000.00 %}
+                                                   
+                                                      
+                                                    
+                                                      {% with beta=get_total  mega=total_plugin omega=1000 alpha=total_package %}
+
+
+                                                         <ul class="amount">
+                                                            <li class="total">Total Payment With VAT:<span style="color:red;">₦{{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2|intcomma }}</span></li>
+                                                         </ul>
+                                                            <form>
+                                                               <script src="https://js.paystack.co/v1/inline.js"></script>
+                                                               <button class="btn btn-secondary w-100" type="button" onclick="payWithPaystack()" id="payment-submit">MAKE PAYMENT ₦{{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2|intcomma }}<i class="icofont-plus"></i> </button></a>
+                                                            </form>
+                                                        
+                                                      {% endwith %}
+         
+                                                {% else %}
+         
+                                   
+                                               
+
+                                                   {% with beta=get_total  mega=total_plugin omega=distance.distance.text|slice:':-2'|mul:settings.distance_price_food alpha=total_package %}
+                                                         <ul class="amount">
+                                                                  <li class="total">Total Payment With VAT:<span style="color:red;"> ₦{{  beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2|intcomma  }}</span></li>
+                                                         </ul>
+                                                            <form>
+                                                               <script src="https://js.paystack.co/v1/inline.js"></script>
+                                                               <button class="btn btn-secondary w-100" type="button" onclick="payWithPaystack()" id="payment-submit">MAKE PAYMENT ₦{{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2|intcomma }}<i class="icofont-plus"></i> </button></a>
+                                                            </form>
+                                                   {% endwith %}
+
+
+                                                
+         
+                                                        
+                                                    
+         
+                                                {% endif %}
+         
+                                       {% endif %}
+                                   
+                           </div>
+              
+                        </div>
+
+                     {% endif %}
+            
+                  {% endif %}
+
+                  <div class="bg-white rounded shadow-sm p-4 mb-4">
+                     <h4 class="mb-1">Choose a delivery address</h4>
+                     <h6 class="mb-3 text-black-50">Multiple addresses in this location</h6>
+                     <div class="row">
+
+                        {% for dl in  delivery %}
+                        
+                        
+                           <div class="col-md-4">
+                              <div class="bg-white card addresses-item mb-4 border border-success">
+                                 <div class="gold-members p-4">
+                                    <div class="media">
+                                       <div class="mr-3"><i class="icofont-ui-home icofont-3x"></i></div>
+                                       <div class="media-body">
+                                          <h6 class="mb-1 text-black">{{ dl.nickname }}</h6>
+                                          <p class="text-black">{{ dl.myaddress|truncatechars:'60' }} | {{ dl.location }}</p>
+                                          <form method="POST">
+                                             {% csrf_token %}
+
+                                             <input type="text" value="{{ dl.myaddress }}" name="myaddress" hidden>
+                                             <input type="text" value="{{ dl.message }}" name="message" hidden>
+                                             <input type="text" value="{{ dl.location.id }}" name="location" hidden>
+                                             
+                                             <p class="mb-0 text-black font-weight-bold">
+                                                <button type='submit' class="btn btn-sm btn-success mr-2" name="BtnDelivery"> DELIVER HERE</button>
+                                             
+                                             </p>
+
+                                          </form>
+
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+
+                        {% endfor %}
+                        <div class="col-md-4">
+                           <div class="bg-white card addresses-item">
+                              <div class="gold-members p-4">
+                                 <div class="media">
+                                    <div class="mr-3"><i class="icofont-location-pin icofont-3x"></i></div>
+                                    <div class="media-body">
+                                       <h6 class="mb-1 text-secondary">New Address</h6>
+                                       <p>Kindly Add New Address To Your Control Panel For Future Usage
+                                       </p>
+                                       <p class="mb-0 text-black font-weight-bold"><a class="btn btn-sm btn-primary mr-2" href="{% url 'customer:my-address' %}"> ADD NEW ADDRESS</a> 
+                                         
+                                       </p>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                    
+                  </div>
+
+
+          </div>
+      </div>
+  </div>
+  <!-- cart area end -->
+
+  
+  {% if object is None %}
+  
+    {% else %}
+  
+       {% if object.shipping_address is None %}
+  
+       {% else %}
+  
+           <!-- place below the html form -->
+           <script>
+                 
+            function payWithPaystack() {
+
+               var handler = PaystackPop.setup({ 
+                  key: '{{ PAY_STACK_KEY }}', //put your public key here pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa
+                  email: '{{ object.user.email }}', //put your customer's email here
+
+
+                  {% if request.user.subscriber.active  %}
+                                 
+                                {% with beta=object.get_total_without_tax|floatformat:0 mega=object.get_total_package %}
+                                    amount: {{ beta|addition:mega|mul:0.075|addition:beta|addition:mega|floatformat:0 }} * 100,
+                                 {% endwith %}
+                                 
+                          
+                           {% else %}
+
+                                    {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_food < 1000.00 %}
+                                       
+                                          
+                                          
+                                         {% with beta=get_total  mega=total_plugin omega=1000 alpha=total_package %}
+
+                                         amount: {{ beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2 }} * 100,
+
+                                         {% endwith %}
+
+                                    {% else %}
+
+                       
+
+                                      {% with beta=get_total  mega=total_plugin omega=distance.distance.text|slice:':-2'|mul:settings.distance_price_food alpha=total_package %}
+
+                                         amount: {{  beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2 }} * 100,
+                                 
+                                   
+                                      {% endwith %}
+    
+                                            
+                                        
+
+                                    {% endif %}
+
+                           {% endif %}
+                       
+
+
+
+                           
+                        
+            
+                     
+
+
+                  currency: "NGN",
+                  ref: "{{ object.ref_code }}", // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                  firstname: '{{ object.user.username }}',
+                  lastname: '{{ object.user.username }}',
+                  
+                  onClose: function(){
+
+                     window.location.replace("{% url 'customer:failed-payment' %}");
+                     
+                  },
+                  metadata: {
+                     custom_fields: [
+                        {
+                           display_name: "{{  object.user.email }}",
+                           variable_name: "{{  object.user.email  }}",
+                           value: "{{  object.user.email }}"
+                        }
+                     ]
+                  },
+
+               
+
+
+               callback: function(response){
+                  //alert('success. transaction ref is ' + response.reference);
+
+
+
+
+
+
+
+                 
+                  {% if request.user.subscriber.active  %}
+
+                           {% with beta=object.get_tax_total|floatformat:0  %}
+                              
+                              window.location.replace("{% url 'customer:subscription-verify-payment' beta|intcomma distance.duration.text|slice:':-4'  distance.distance.text|slice:':-2' %}?ref="+response.reference);
+
+
+                           {% endwith %}
+
+
+                          
+                  {% else %}
+
+                
+
+                
+                           {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_food < 1000.00  %}
+                                                                                       
+                                 
+                                   {% with beta=get_total  mega=total_plugin omega=1000 alpha=total_package %}
+
+                                      window.location.replace("{% url 'customer:verify-payment' beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha|floatformat:2 distance.duration.text|slice:':-4'|add:10 distance.distance.text|slice:':-2'  omega beta|addition:mega beta|addition:mega|addition:omega|addition:alpha|mul:0.075 alpha %}?ref="+response.reference);
+
+                                   {% endwith %}
+
+
+                                    
+
+
+                           {% else %}
+
+                
+
+                                   {% with beta=get_total  mega=total_plugin omega=distance.distance.text|slice:':-2'|mul:settings.distance_price_food alpha=total_package %}
+
+                                      window.location.replace("{% url 'customer:verify-payment' beta|addition:mega|addition:omega|addition:alpha|mul:0.075|addition:beta|addition:mega|addition:omega|addition:alpha distance.duration.text|slice:':-4'|add:10 distance.distance.text|slice:':-2'  omega beta|addition:mega beta|addition:mega|addition:omega|addition:alpha|mul:0.075 alpha %}?ref="+response.reference);
+
+                                   {% endwith %}
+
+                                 
+
+
+      
+                           {% endif %}      
+                           
+                  {% endif %}        
+
+                                                                       
+                    
+
+               },
+                  
+                  
+               });
+               handler.openIframe(); //open the paystack's payment modal
+         }
+
+
+
+
+
+          </script>
+  
+  
+       {% endif %}
+  
+       
+    {% endif %}
+
+
+  {% endblock content %}

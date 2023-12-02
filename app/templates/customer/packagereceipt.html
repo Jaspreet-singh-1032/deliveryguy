@@ -1,0 +1,145 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+
+
+
+      <section class="breadcrumb-osahan pt-5 pb-5 bg-dark position-relative text-center">
+         <h1 class="text-white">Invoice</h1>
+         <h6 class="text-white-50">Order {{ object.ref_code }}</h6>
+      </section>
+      <section class="section pt-5 pb-5">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-8 mx-auto">
+                  <div class="p-5 osahan-invoice bg-white shadow-sm">
+                     <div class="row mb-5 pb-3 ">
+                        <div class="col-md-8 col-10">
+                           <h3 class="mt-0">Thanks for choosing <strong class="text-secondary"><a href="/">DishAxis</a></strong>, {{ request.user.username|title }} ! Here are your order details: </h3>
+                        </div>
+                        <div class="col-md-4 col-2 pl-0 text-right">
+                           <p class="mb-4 mt-2">
+                              
+                              <button class="text-primary font-weight-bold" onclick="window.print();" class="noPrint"><i class="icofont-print"></i> PRINT</button>
+
+                           </p>
+                           <img alt="DishAxis" src="{% static 'web/dishicon.png' %}" style="width: 32px;">
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-6">
+                           <p class="mb-1 text-black">Order No: <strong>{{ invoice.receiver_code }}</strong></p>
+                           <p class="mb-1">Order placed at: <strong>{{ package.created_at }}</strong></p>
+                           
+
+
+                           
+                           {% if package.being_delivered == False %}
+                              <p class="mb-1">Order Status: <strong class="text-success">On Process</strong></p>
+                              <p class="mb-1">Delivery Status: <strong class="text-success">{{ package.mins }} mins away</strong></p>
+                              {% if package.taken == True %}
+                                 <p class="mb-1">Driver Info: <strong class="text-success"> {{ package.bike.get_full_name|title }} | {{ package.bike.profilebike.phone_number }} </strong></p>
+                                 
+
+                              {% endif %}
+                             
+                           {% else %}
+                              <p class="mb-1">Order Status: <strong class="text-success">Completed</strong></p>
+                           {% endif %}
+
+
+
+
+
+
+                        </div>
+                        <div class="col-md-6">
+                           <p class="mb-1 text-black">Delivery To:</p>
+                           <p class="mb-1 text-primary"><strong>{{ invoice.deliver_address }}</strong></p>
+                           <p class="mb-1">{{  invoice.shipping_address}}
+                           </p>
+                        </div>
+                     </div>
+                     <div class="row mt-5">
+                        <div class="col-md-12">
+                           <p class="mb-1">Picking from:</p>
+
+                        
+
+                              
+                            
+
+                                 <h6 class="mb-1 text-black"><strong>{{ invoice.picking_address }}</strong></h6>
+                              
+                           
+                          
+
+
+                           <table class="table mt-3 mb-0">
+                              <thead class="thead-light">
+                                 <tr>
+                                    <th class="text-black font-weight-bold" scope="col">Item(s) Name</th>
+                                    <th class="text-right text-black font-weight-bold" scope="col">Weight</th>
+                                    <th class="text-right text-black font-weight-bold" scope="col">Values</th>
+                                 </tr>
+                              </thead>
+                              <tbody>
+                               
+                                 
+                                 
+                                    <tr>
+                                       <td>{{ package.nature_of_goods }} x <span style="color: red;">{{ package.numbers }} <span> </td>
+                                       {% if package.weight is None and package.dimensions is None  %}
+                                          <td class="text-right">0KG  - No  Dimension</td>
+                                          <td class="text-right">₦{{ package.values}} </td>
+                                       {% else %}
+                                          <td class="text-right">{{ package.weight }} - {{ package.dimensions }}</td>
+                                          <td class="text-right">₦{{ package.values}} </td>
+                                       {% endif %}
+                                       
+                                    </tr>
+                                
+                                
+
+                                 <tr>
+                                    <td class="text-right" colspan="2">
+                                       {% if package.subscription %}
+                                          <h6 class="text-success">You Made the Payment From you Subscription:
+                                       {% else %}
+                                             {% if package.pay_on_delivery == True %}
+                                                Payment of Delivery
+                                                {% else %}
+                                                Total Payment For the Delivery With VAT
+                                             {% endif %}
+                                          </h6>
+                                       {% endif %}
+                                    </td>
+                                    <td class="text-right">
+                                       {% if package.subscription %}
+                                          <h6 class="text-success"> {{ request.user.subscriber.package }}</h6> 
+                                       {% else %}
+                                      
+                                          <h6 class="text-success"> ₦{{ package.paid_amount|floatformat:2|intcomma}} </h6> 
+                                       {% endif %}
+                                       
+                                    </td>
+                                 
+                                 </tr>
+
+                              </tbody>
+                           </table>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+
+
+{% endblock content %}

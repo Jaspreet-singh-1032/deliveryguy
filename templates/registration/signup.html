@@ -1,0 +1,52 @@
+
+{% extends 'registration/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+  			<div class="container">
+                     <div class="row">
+                        <div class="col-md-9 col-lg-8 mx-auto pl-5 pr-5">
+                           <h3 class="login-heading mb-4">Welcome To deliveryGuy!</h3>
+                           	<form method="POST" novalidate>
+                            
+									{% csrf_token %}
+                           
+                           {{ form.username|as_crispy_field }}
+                           <div id="username-error" style="color:red;"></div>
+                           
+                           {{ form.email|as_crispy_field }}
+                           <div id="email-error" style="color:red;"></div>
+									
+                           
+                           {{ form.first_name|as_crispy_field }}
+                         
+                           {{ form.last_name|as_crispy_field }}
+
+
+                           {{ form.password1|as_crispy_field }}
+                         
+                           {{ form.password2|as_crispy_field }}
+                           
+
+
+
+                             
+
+							  <button class="btn btn-lg btn-outline-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Sig Up</button>
+
+
+                              <div class="text-center pt-3">
+                                 Don’t have an account? <a class="font-weight-bold" href="{% url 'account_login' %}">Login</a>
+                              </div>
+							  
+                           </form>
+                           
+                        </div>
+                     </div>
+            </div>
+              
+
+{% endblock content %}
+

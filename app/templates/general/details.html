@@ -1,0 +1,130 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+{% include 'frontpage/nav2.html' %}
+
+    <!-- shop-details Area Start-->
+    <div class="shop-details-area pd-top-100">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="sticy-product">
+                        <div class="product-thumbnail-wrapper">
+                            <div class="single-thumbnail-slider">
+
+                                <div class="slider-item">
+                                    <img src="{{ good.image.url }}" alt="{{ good.name }} - Image">
+                                </div>
+
+                                {% for gallery_image in good.goodimagegallery_set.all %}
+                                    
+                                    <div class="slider-item">
+                                        <img src="{{ gallery_image.image.url }}" alt="{{ good.name }} - Image">
+                                    </div>
+                                {% endfor %}
+
+                                
+                               
+                            </div>
+                            <div class="product-thumbnail-carousel">
+
+                                <div class="single-thumbnail-item">
+                                    <img src="{{ good.image.url }}" alt="{{ good.name }} - Image">
+                                </div>
+
+                                {% for gallery_image in good.goodimagegallery_set.all %}
+                                 
+                                    <div class="single-thumbnail-item">
+                                        <img src="{{ gallery_image.image.url }}" alt="{{ good.name }} - Image">
+                                    </div>
+                                {% endfor %}
+
+                                
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="shop-item-details">
+                        <nav>
+                            <ul class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="/">Home</a></li>
+                              <li class="breadcrumb-item"><a href="{% url 'app:all-menu' %}">All Menu</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">{{ good.name|upper }}</li>
+                            </ul>
+                        </nav>                        
+                        <h2 class="entry-title">{{ good.name|upper }}</h2>
+                        <div class="row">
+                           
+                            <div class="col-lg-6 align-self-center">
+                                <h4 class="price">₦{{ good.price|floatformat:2|intcomma }}</h4>
+                            </div>                            
+                        </div>   
+
+     
+
+
+                        <p class="mt-4">{{ good.description|safe }}</p>  
+                        
+                        <form>
+                            <div class="quantity buttons_added">
+                                <input type="button" value="-" class="minus">
+                                <input type="number" class="input-text qty text" step="1" min="1" max="10000" name="quantity" value="1">
+                                <input type="button" value="+" class="plus">
+                            </div>
+                         
+                            <a class="btn btn-secondary" href="{% url 'customer:add-to-cart' good.pk %}">Add to cart <i class="ri-add-line"></i></a>  
+
+                        </form>
+                       
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- shop-details Area End -->
+
+    <!-- related-product Area Start-->
+    <section class="related-product-area pd-top-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="section-title mb-0">
+                        <h2 class="title">Related Products</h2>
+                    </div>
+                    <div class="related-product-slider owl-carousel style-2">
+                        {% for rd in related  %}
+                            <div class="item">
+                                <div class="single-item-wrap">
+                                    <div class="thumb">
+                                        <img src="{{ rd.image.url }}" alt="{{ rd.name }}">
+                                        <a class="fav-btn" href="#"><i class="ri-heart-line"></i></a>
+                                    </div>
+                                    <div class="wrap-details">
+                                        <h5><a href="{% url 'app:food-general' rd.name %}">{{ rd.name|upper }}</a> <span class="price" style="margin-left: 10px;">₦{{ good.price|floatformat:2|intcomma }}</span></h5>
+                                                                   
+                                    </div>
+                                    <div class="btn-area">
+                                        <a class="btn btn-secondary" href="{% url 'app:food-general' rd.name %}">SEE DETAILS </a>         
+                                    </div> 
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- related-product Area End -->
+
+{% endblock content %}

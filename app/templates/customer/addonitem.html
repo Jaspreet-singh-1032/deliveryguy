@@ -1,0 +1,352 @@
+
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+{% include 'frontpage/nav2.html' %}
+
+
+    <!-- bredcrumb Area Start-->
+    <section class="breadcrumb-area">
+        <div class="banner-bg-img"></div>
+        <div class="banner-shape-1"><img src="{% static 'app/assets/img/banner/shape-1.png' %}" alt="img"></div>
+        <div class="banner-shape-2"><img src="{% static 'app/assets/img/banner/shape-2.png' %}" alt="img"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h3>Food Package
+                        </h3>
+                        <h1>{{ order_item.item.name|upper }}</h1>
+                        </h1>
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="/">Home</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- bredcrumb Area End --> 
+
+    <!-- checkout area start -->
+    <div class="checkout-area pd-top-120 pd-bottom-120">
+        <div class="container">
+            <div class="row justify-content-center">
+
+                {% for message in messages %}
+                    <label>
+                    <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+                    <div class="alert error">
+                    <span class="alertClose">X</span>
+                    <span class="alertText">{{ message }}
+                        <br class="clear"/></span>
+                    </div>
+                    </label>
+                {% endfor %}
+                
+                {% if order_item.item.addon == True and order_item.item.delivery == True %}
+                    
+                
+                    
+                    <div class="col-lg-4">
+                        <div class="order-area">
+                            <h5 class="title" style="color: #fff">Select Delivery Package</h5>
+                        
+                        
+                            <div class="peyment-method">
+                            
+                                <form method="POST" novalidate>
+                                {% csrf_token %}
+                                    <ul class="card-area">
+
+                                        
+                                        {% for dl in delivery %}
+                                            
+                                    
+                                            
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="delivery_package_id" value="{{ dl.pk }}" 
+                                                {% if dl.pk == 1 %} checked {% endif %}>
+                                                <label class="form-check-label" for="delivery_package_id">
+                                                </label>
+                                            </div>
+                                            <div class="details">
+                                                <h6>{{ dl.name|upper }} - <span style="color: red;">₦{{ dl.price }}</span></h6>
+                                            
+                                            </div>
+                                        </li>
+
+                                    
+
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                
+                                
+                            
+                                                
+                        
+                            </div>
+                            
+                        </div>                
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="order-area" >
+                            <h5 class="title" style="color: #fff">Select Free Item</h5>
+                        
+                        
+                            <div class="peyment-method">
+                                
+                            
+                                {% csrf_token %}
+                                    <ul class="card-area">
+
+                                        
+                                        {% for ad in addon %}
+                                            
+                                    
+                                            
+                                        <li>
+                                            {% if ad in selected_addons %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="addon_ids" value="{{ ad.pk }}" checked>
+                                                <label class="form-check-label" for="ad_ids">
+                                                </label>
+                                            </div>
+                                            {% else %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="addon_ids" value="{{ ad.pk }}">
+                                                <label class="form-check-label" for="ad_ids">
+                                                </label>
+                                            </div>
+                                            {% endif %}
+
+
+                                            <div class="details">
+                                                <h6>{{ ad.name|upper }} <img src="{{ ad.image.url }}" alt="{{ ad.name }}" width="40px;" class="rounded-circle shadow-4-strong"></h6>
+                                            
+                                            </div>
+                                        </li>
+
+                                        {% endfor %}
+      
+                                    </ul>
+                                
+                                
+
+                                
+                            
+                            </div>
+                        
+                        </div> 
+                        
+                    
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="order-area" >
+                            <h5 class="title" style="color: #fff">Select Item</h5>
+                        
+                        
+                            <div class="peyment-method">
+
+                                
+                                
+                            
+                                {% csrf_token %}
+                                    <ul class="card-area">
+
+                                        {% for ad in food_details %}
+ 
+                                                <li>
+                                                   
+                                                    <div class="details">
+                                                       
+                                                        {% if ad.total_quantity == 0 %}
+
+                                                       
+                                                            <h6>{{ ad.food_name|upper }} | ₦{{ ad.food_price }} <span style="color: red; font-size: 12px"><a  class="button" hx-target="#main" hx-post="{% url 'app:add-to-cart-plugin' ad.food_pk order_item.item.pk %}"> ADD TO CART </a></span></h6>
+                                                        
+                                                      
+
+                                                        {% else %}
+                                                            
+                                                                <h6>{{ ad.food_name|upper }} ₦{{ ad.food_price }} </h6>
+                                                            
+                                                           
+                                                                <div class="quantity1 buttons_added">
+                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:minus-to-cart-plugin' ad.food_pk order_item.item.pk %}"><input type="button" value="-" class="minus" style="color: #fff"></a>
+                                                                    <input type="number" class="input-text qty text"  name="quantity" value="{{ ad.total_quantity }}" style="color: #fff">
+                                                                    <a hx-target="#main" class="button"  hx-post="{% url 'customer:add-to-cart-plugin' ad.food_pk order_item.item.pk %}"><input type="button" value="+" class="plus" style="color: #fff"></a>
+                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:plugin-delete-item' ad.food_pk order_item.item.pk %}"><input type="button" value="X" class="delete" style="color: #fff"></a>
+                                                                </div>
+                                                        {% endif %}
+                                                            
+                                                       
+                                                        
+                                                    </div>
+
+                                                  
+                                                </li>
+                                                
+                                      
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                
+                                
+
+                                
+                            
+                            </div>
+                        
+                        </div> 
+                        
+                    
+                    </div>
+
+                    <button class="btn btn-secondary w-100" name="Progress" type="submit">CONTINUE</button> 
+                    </form>
+
+                {% elif order_item.item.addon == False %}
+
+                    <div class="col-lg-6">
+                        <div class="order-area">
+                            <h5 class="title" style="color: #fff">Select Delivery Package</h5>
+                        
+                        
+                            <div class="peyment-method">
+                            
+                                <form method="POST" novalidate>
+                                {% csrf_token %}
+                                    <ul class="card-area">
+
+                                        
+                                        {% for dl in delivery %}
+                                            
+                                    
+                                            
+                                        <li>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="delivery_package_id" value="{{ dl.pk }}" 
+                                                {% if dl.pk == 1 %} checked {% endif %}>
+                                                <label class="form-check-label" for="delivery_package_id">
+                                                </label>
+                                            </div>
+                                            <div class="details">
+                                                <h6>{{ dl.name|upper }} - <span style="color: red;">₦{{ dl.price }}</span></h6>
+                                            
+                                            </div>
+                                        </li>
+
+                                    
+
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                
+                                
+                            
+                                                
+                        
+                            </div>
+                            
+                        </div>                
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="order-area" >
+                            <h5 class="title" style="color: #fff">Select Item(s)</h5>
+                        
+                        
+                            <div class="peyment-method">
+
+                                    <ul class="card-area">
+
+                                   
+                                        
+                                        {% for ad in food_details %}
+ 
+                                            
+                                           
+ 
+                                                <li>
+                                                   
+                                                    
+                                                        
+                                                        
+
+                                                        
+                                                        {% if ad.total_quantity == 0 %}
+                                                        <div class="details">
+
+                                                        
+                                                            <h6>{{ ad.food_name|upper }} | ₦{{ ad.food_price }} <span style="color: red; font-size: 12px"><a hx-target="#main" hx-post="{% url 'app:add-to-cart-plugin' ad.food_pk order_item.item.pk %}"> ADD TO CART </a></span></h6>
+                                                        </div>
+                                                        
+
+                                                        {% else %}
+                                                        <div class="details">
+                                                          
+                                                                <h6>{{ ad.food_name|upper }} ₦{{ ad.food_price }} </h6>
+                                                            
+                                                           
+                                                                <div class="quantity1 buttons_added">
+                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:minus-to-cart-plugin' ad.food_pk order_item.item.pk %}"><input type="button" value="-" class="minus" style="color: #fff"></a>
+                                                                    <input type="number" class="input-text qty text"  name="quantity" value="{{ ad.total_quantity }}" style="color: #fff">
+                                                                    <a hx-target="#main" class="button"  hx-post="{% url 'customer:add-to-cart-plugin' ad.food_pk  order_item.item.pk %}"><input type="button" value="+" class="plus" style="color: #fff"></a>
+                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:plugin-delete-item' ad.food_pk order_item.item.pk  %}"><input type="button" value="X" class="delete" style="color: #fff"></a>
+                                                                </div>
+                                                        </div>
+                                                        {% endif %}
+                                                            
+                                                       
+                                                        
+                                                   
+
+                                                  
+                                                </li>
+                                                
+                                      
+                                        {% endfor %}
+                                        
+                                    </ul>
+                                
+                                
+
+                                
+                            
+                            </div>
+                        
+                        </div> 
+                        
+                    
+                    </div>
+
+                   
+
+                    <button class="btn btn-secondary w-100" name="Progress" type="submit" style="margin-top: 20px;">CONTINUE</button> 
+                    </form>
+
+                {% endif %}
+           
+            </div>
+        </div>
+    </div>
+    <!-- checkout area end -->
+
+
+{% endblock content %}
+

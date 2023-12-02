@@ -1,0 +1,36 @@
+{% load humanize %}
+
+    {% for fd  in good %}
+                                
+            
+        <div class="col-md-4 col-sm-6 mb-4" hx-target="#main" hx-swap="outerHTML">
+        <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+            <div class="list-card-image">
+                <div class="star position-absolute"><span class="badge badge-success"><i class="icofont-star"></i> 3.1 (300+)</span></div>
+                <div class="favourite-heart text-danger position-absolute"><a href="#"><i class="icofont-heart"></i></a></div>
+                <div class="member-plan position-absolute"><span class="badge badge-dark">Promoted</span></div>
+                <a href="#">
+                <img src="{{ fd.image.url }}" class="img-fluid item-img" style="width: 508px; height: 180px;">
+                </a>
+            </div>
+            <div class="p-3 position-relative">
+                <div class="list-card-body">
+                    <h6 class="mb-1"><a href="#" class="text-black">{{ fd.name|title }}</a></h6>
+                    <p class="text-gray mb-2">{{ fd.category }}</p>
+                    <p class="text-gray time mb-0"><a class="btn btn-link btn-sm pl-0 text-black pr-0" href="#">₦ {{ fd.price|floatformat:2|intcomma }} </a> <span class="badge badge-success">NEW</span> <span class="float-right"> 
+                    <a class="btn btn-outline-secondary btn-sm"  hx-post="{% url 'customer:add-to-cart' fd.pk %}">ADD</a>
+                    
+                    </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        </div>
+
+
+
+    {% endfor %}
+
+
+
+

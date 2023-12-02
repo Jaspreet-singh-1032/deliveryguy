@@ -1,0 +1,115 @@
+{% load static %}
+{% load humanize %}
+{% load cart_template_tags %}
+
+
+<body class='sc5' id="main">
+
+
+    
+<!-- navbar start -->
+<header class="navbar-area">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container nav-container">
+            <div class="responsive-mobile-menu">
+                <button class="menu toggle-btn d-block d-lg-none" data-target="#themefie_main_menu" 
+                aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-left"></span>
+                    <span class="icon-right"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="themefie_main_menu">
+                <ul class="navbar-nav menu-open">
+                    <li class="current-menu-item">
+                        <a href="/">HOME</a>
+                     </li>
+   
+                     <li class="current-menu-item menu-item-has-children">
+                        <a href="#">ABOUT US</a>
+                        <ul class="sub-menu ps-0">
+                            <li><a href="/">About</a></li>
+                            
+                        </ul>
+                    </li>
+   
+   
+                     <li>
+                        <a href="{% url 'app:all-menu' %}">OUR MENU</a>
+                     </li>
+                     
+                     {% if request.user.is_authenticated  %}
+   
+                        <li>
+                           <a href="{% url 'app:my-order' %}">MY ORDER</a>
+                        </li>
+                        
+                     {% endif %}
+                        
+                     
+                    
+                     
+                      <li>
+                          <a href="/">CONTACTS</a>
+                      </li>
+                  </ul>
+                </ul>
+            </div>
+            <div class="logo">
+                <a class="main-logo" href="/"><img src="{% static 'web/logo.png' %}" alt="DeliveryGuy" width='167px' length='50px'></a>
+            </div>
+            {% if request.user.is_authenticated  %}
+            
+            <div class="nav-right-part nav-right-part-mobile">
+                <ul>
+                    <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_logout' %}">LOGOUT</a>
+                    </li>
+                    <li class="menu-cart"><a href="{% url 'customer:all-menu' %}">CART <span span style="color: red">{{ request.user|cart_item_count }}</span></a></li>
+                    <li>₦{{ user_order.get_tax_total|floatformat:2|intcomma }}</li>
+                </ul>
+            </div>
+            
+            <div class="nav-right-part nav-right-part-desktop">                    
+                <ul>
+                    <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'user_logout' %}">LOGOUT</a>
+                    </li>
+                    <li class="menu-cart"><a href="{% url 'customer:all-menu' %}">CART <span style="color: red">{{ request.user|cart_item_count }}</span></a></li>
+                    <li>₦{{ user_order.get_tax_total|floatformat:2|intcomma }}</li>
+                </ul>
+            </div>
+            
+            {% else %}
+
+            <div class="nav-right-part nav-right-part-mobile">
+                <ul>
+                    <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'account_login' %}">LOGIN</a>
+                    </li>
+                    <li class="menu-cart" style="color: #fff"><a href="{% url 'customer:all-menu' %}">CART <span span style="color: red">0</span></a></li>
+                    <li>₦00.00</li>
+                </ul>
+            </div>
+            <div class="nav-right-part nav-right-part-desktop">                    
+                <ul>
+                    <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'account_login' %}">LOGIN</a>
+                    </li>
+                    <li class="menu-cart"><a href="{% url 'customer:all-menu' %}">CART <span span style="color: red">0</span></a></li>
+                    <li>₦00.00</li>
+                </ul>
+            </div>
+
+            {% endif %}
+        </div>
+    </nav>
+</header>
+<!-- navbar end -->

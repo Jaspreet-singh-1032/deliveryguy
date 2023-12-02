@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Connect - Personal Portfolio Template</title>
+    <link rel="icon" href="assets/icons/favicon.png" type="image/png" sizes="16x16">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Connect Multipurpose  Landing Page Template Template">
+    <meta name="keywords" content="Connect HTML Template, Connect Landing Page Template,  Landing Page Template">
+    <link href="{% static 'frontpage/assets/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" media="all" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900%7COpen+Sans:300,400,500" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'frontpage/assets/css/animate.css' %}"> <!-- Resource style -->
+    <link rel="stylesheet" href="{% static 'frontpage/assets/css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'frontpage/assets/css/owl.theme.css' %}">
+    <link rel="stylesheet" href="{% static 'frontpage/assets/css/ionicons.min.css' %}"> <!-- Resource style -->
+    <link href="{% static 'frontpage/assets/css/stylesheet.css' %}" rel="stylesheet" type="text/css" media="all" />
+  </head>
+  <body class="boxed-layout">
+
+  {% block content %}
+
+  {% endblock content %}
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+            <div class="footer-logo">
+                <h2>C O N N E C T.</h2>
+            </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+            <ul class="footer-menu">
+                <li><a href="{% url 'bike_signup' %}">Sign Up Bike</a> </li>
+                <li><a href="#main">Privacy</a> </li>
+                <li><a href="#main">Terms</a> </li>
+                <li><a href="#main">Contact</a> </li>
+            </ul>
+            </div>
+            <div class="col-lg-4 col-md-3 col-sm-12">
+            <div class="footer-links">
+                <ul>
+                <li><a href="#main"> <img class="img-fluid" src="assets/icons/i1.png" alt="Icon"> </a> </li>
+                <li><a href="#main"> <img class="img-fluid" src="assets/icons/i2.png" alt="Icon"> </a> </li>
+                <li><a href="#main"> <img class="img-fluid" src="assets/icons/i3.png" alt="Icon"> </a> </li>
+                <li><a href="#main"> <img class="img-fluid" src="assets/icons/i4.png" alt="Icon"> </a> </li>
+                </ul>
+            </div>
+            </div>
+        </div>
+        <!-- Scroll To Top -->
+            <a id="back-top" class="back-to-top js-scroll-trigger" href="#main"></a>
+        <!-- Scroll To Top Ends-->
+        </div>
+    </div>
+
+    <!-- Jquery and Js Plugins -->
+    <script src="assets/js/jquery-2.1.1.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.validate.min.js"></script>
+    <script src="assets/js/plugins.js"></script>
+    <script src="assets/js/custom.js"></script>
+  </body>
+</html>

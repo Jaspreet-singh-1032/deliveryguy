@@ -1,0 +1,297 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+<style>
+   .menu {
+	  width: 200px; 
+	  list-style-type: none; /* removing bullerts from list */
+	}
+     /* Styling the links */	 
+	.menu li a {
+	  display: block;	  
+	  color: white; 
+	  padding: 12px; 
+	  text-decoration: none; 
+	  font-size : 20px;
+     padding: 10.5px 11px;
+	}
+	.menu a:hover {
+	  
+     color: white;
+	}
+	.menu a.active {
+	  background-color: #ce2829; 
+	  color: white;
+	}
+
+
+
+      
+</style>
+
+
+{% include 'frontpage/nav2.html' %}
+
+    <!-- bredcrumb Area Start-->
+    <section class="breadcrumb-area">
+        <div class="banner-bg-img"></div>
+        <div class="banner-shape-1"><img src="assets/img/banner/shape-1.png" alt="img"></div>
+        <div class="banner-shape-2"><img src="assets/img/banner/shape-2.png" alt="img"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h3>Welcome to My Order & Adress
+                        </h3>
+                        <h1>Personal Details</h1>
+                        <nav aria-label="breadcrumb">
+                            <ul class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="/">Home</a></li>
+                              <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- breadcrumb Area End --> 
+
+    <!-- shop Area Start-->
+    <section class="shop-area pd-top-120 pd-bottom-120">
+                  {% for message in messages %}
+                     <label>
+                        <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+                        <div class="alert error">
+                        <span class="alertClose">X</span>
+                        <span class="alertText">{{ message }}
+                           <br class="clear"/></span>
+                        </div>
+                     </label>
+                  {% endfor %}
+        <div class="container">
+                  
+                   
+            <div class="row justify-content-center">
+               <div class="col-lg-4 order-lg-first">
+                  <div class="sidebar-area">
+
+                    
+                     
+                      <div class="widget widget_categories style-2">
+                         
+
+                         
+
+                           <ul class="nav nav-tabs menu" id="categoryTabs" role="tablist">
+                              
+                              
+                              <li><a class="active" id="tab-1" data-bs-toggle="tab" data-bs-target="#panel-1" role="tab" aria-controls="panel-1" aria-selected="true">My Orders</a></li>
+                              <li><a class="" id="tab-2" data-bs-toggle="tab" data-bs-target="#panel-2" role="tab" aria-controls="panel-2" aria-selected="true">My Address</a></li>
+                              <li><a class="" id="tab-3" data-bs-toggle="tab" data-bs-target="#panel-3" role="tab" aria-controls="panel-3" aria-selected="true">My Profile</a></li>
+                              <li><a class="" id="tab-4" data-bs-toggle="tab" data-bs-target="#panel-4" role="tab" aria-controls="panel-4" aria-selected="true">My Password</a></li>
+
+                               <!-- <li><a href="#"><img src="assets/img/category/1.png" alt="img"> Ramen <span>(5)</span></a></li>
+                              <li><a href="#"><img src="assets/img/category/2.png" alt="img"> Pizza <span>(9)</span> </a></li>
+                              <li><a href="#"><img src="assets/img/category/3.png" alt="img"> Burger <span>(18)</span></a></li>
+                              <li><a href="#"><img src="assets/img/category/4.png" alt="img"> French fries <span>(14)</span></a></li>
+                              <li><a href="#"><img src="assets/img/category/5.png" alt="img"> Fast food <span>(10)</span></a></li>
+                              <li><a href="#"><img src="assets/img/category/6.png" alt="img"> Soft drinks <span>(28)</span></a></li>
+                              -->
+                          
+
+
+
+
+
+
+
+
+
+
+
+                              <!-- <li><a href="#"><img src="assets/img/category/2.png" alt="img"> Pizza <span>(9)</span> </a></li> -->
+                              
+                          </ul>
+                      </div>
+                      
+                  </div>
+              </div>   
+                <div class="col-lg-8">
+                    <div class="row justify-content-center">
+
+                     
+
+                        <div class="tab-content" id="categoryTabContent">
+                           
+
+                           <div class="col-md-12 tab-pane fade show active" id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+                              <div class="order-area" style="width: 100%">
+                                 <h5 class="title" style="color: white">MY ORDERS DETAILS</h5>
+                                 {% for od in object %}
+                                    <div class="order-product">
+                                       
+                                          <div class="details">
+                                             <h6><span class="float-right text-info">ORDERED ON {{ od.created_at|naturalday|upper }}<i class="icofont-check-circled text-success"></i></span> | ORDERED NO:  {{ od.ref_code }}</h6>
+                                             <ul>
+                                               
+                                                  
+
+
+
+
+                                                   {% if od.paid == True %}
+
+                                                   {% for order_item in od.items.all  %}
+                                                      <li><span>ITEMS BOUGHT:</span>  {{ order_item.item.name }} x {{ order_item.quantity }} </li>
+                                                   {% endfor %}
+                                                   <p class="mb-0 text-black text-primary pt-2"><span class="text-black font-weight-bold"> Total Paid:</span> ₦{{ od.paid_amount|floatformat:2|intcomma}}
+                                                <!-- <a class="btn btn-sm btn-outline-primary" href="{% url 'customer:pos-print' od.pk %}"><i class="icofont-headphone-alt"></i> POS RECEIPT</a> -->
+
+                                                   <div class="float-right">
+                                                   
+                                                  
+                                                         <a href="{% url 'customer:final-order-receipt' od.pk %}"><i class="icofont-headphone-alt"></i>VIEW RECEIPT</a>
+                                                         <!-- <a href="{% url 'customer:pos-print' od.pk %}"><i class="icofont-headphone-alt"></i>VIEW RECEIPT</a> -->
+
+                                                         <a style="color:red" href=""><i class="icofont-refresh"></i> |  REORDER</a>
+                                                
+      
+                                                   </div>
+                                                {% else %}
+                                                   {% for order_item in od.items.all  %}
+                                                      <li><span>ITEMS ON LIST:</span>  {{ order_item.item.name }} x {{ order_item.quantity }} </li>
+                                                   {% endfor %}
+
+                                                      <a style="color:red" href="{% url 'app:order-summary' %}"><i class="icofont-refresh"></i> CONTINUE</a>
+                                                
+                                                {% endif %}
+
+
+                                                 
+                                             </ul>
+                                          </div>
+
+                                       
+                                    </div>
+                                 {% endfor %}
+                                 
+                              </div>   
+                           </div>
+
+                          
+
+
+                           <div class="col-md-12 tab-pane fade show" id="panel-2" role="tabpanel" aria-labelledby="tab-2">
+                              <div class="order-area" style="width: 100%">
+                                 <h5 class="title">MANAGE ADDRESS</h5>
+                                    {% for dl in address %}
+
+                              
+              
+                               
+                                 
+                                 
+                                       <div class="col-md-12"> 
+                                          <div class="bg-white card addresses-item mb-4 border border-primary shadow">
+                                             <div class="gold-members p-4">
+                                                <div class="media">
+                                                   <div class="mr-3"><i class="icofont-ui-home icofont-3x"></i></div>
+                                                   <div class="media-body">
+                                                      <h6 class="mb-1 text-secondary">{{ dl.nickname }}</h6>
+                                                      <p class="text-black">{{ dl.myaddress }}
+                                                      </p>
+                                                      <p class="mb-0 text-black font-weight-bold">
+                                                         {% csrf_token %}
+                                                         <a class="text-primary mr-3"  href="{% url 'customer:edit-address' dl.pk %}"><i class="icofont-ui-edit"></i> EDIT</a> 
+                                                         <a class="text-danger"  href="{% url 'customer:delete-address' dl.pk %}"><i class="icofont-ui-delete"></i> DELETE</a>
+                                                      
+         
+                                                         
+                                                      </p>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                 {% endfor %}
+                                 <div class="col-md-12"> 
+                                    <div class="bg-white card addresses-item mb-4 shadow-sm">
+                                       <div class="gold-members p-4">
+                                          <div class="media">
+                                             <div class="mr-3"><i class="icofont-briefcase icofont-3x"></i></div>
+                                             <div class="media-body">
+                                                <h6 class="mb-1">New Address</h6>
+                                                <p>Kindly Address New Address To You dashboard for reference purpose
+                                                </p>
+                                                <p class="mb-0 text-black font-weight-bold"><a class="btn btn-secondary" href="{% url 'customer:my-address' %}"> ADD NEW ADDRESS</a> 
+                                                </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                            
+                           </div>
+
+
+                           <div class="col-md-12 tab-pane fade show" id="panel-3" role="tabpanel" aria-labelledby="tab-3">
+                              <div class="order-area" style="width: 100%">
+                                 <h5 class="title">USER PROFILE</h5>
+                                  
+                              
+                                    {% csrf_token %}
+                                    <form class="default-form-wrap">
+                                       <div class="row">
+                                             <div class="col-md-12">
+                                                {{ userForm|crispy }}
+                                                {{ form|crispy }}
+                                             </div>
+                                       </div>
+                                    <button class="btn btn-secondary w-100" type="submit" name="myrofile">Update Profile</button>
+
+                     
+                                 
+                              </div>
+                            
+                           </div>
+
+
+                           <div class="col-md-12 tab-pane fade show" id="panel-4" role="tabpanel" aria-labelledby="tab-4">
+                              <div class="order-area" style="width: 100%">
+                                 <h5 class="title">USER PASSWORD</h5>
+                                  
+                              
+              
+                                
+                                    <div class="row">
+                                          <div class="col-md-12">
+                                             
+                                             {{ passform|crispy }}
+                                          </div>
+                                    </div>
+                                 <button class="btn btn-secondary w-100" type="submit" name="myPassword">Update Profile</button>
+                     
+                                 </form>
+                              </div>
+                            
+                           </div>
+
+                        </div>   
+                      
+                    </div>
+                </div> 
+                           
+               
+            </div>
+        </div>
+    </section>
+    <!-- shop Area End -->
+
+{% endblock content %}

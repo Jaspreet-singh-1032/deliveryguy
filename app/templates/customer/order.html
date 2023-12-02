@@ -1,0 +1,50 @@
+{% extends 'registrationbase.html' %}
+{% load humanize %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'registrationheader.html' %}
+
+	<div class="container">
+    <div id="form_container">
+        <div class="row no-gutters">
+            <div class="col-lg-4">
+                <div id="left_form">
+                    <h2 class="mb-0">Hi {{request.user.username|title}}
+                        <span class="mb-0">
+                        <hr/>KWIKY <p>... stressless delivery</p></span></h2>
+                    <a href="{% url 'customer:dashboard' %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">Dashboard</a></br>
+                    <a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">Customer Profile</a></br>
+                    <a href="{% url 'customer:order_history' request.user.id %}" class="btn_1 rounded yellow purchase mb-2" target="_parent">Order History</a></br>
+
+                    <a href="{% url 'customer:dashboard' %}" class="btn_1 mobile_btn  btn-block yellow btn-default mb-1 btn-lg btn-block">Dashboard</a></br>
+	                <a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="btn_1 mb-1 btn-block mobile_btn yellow">Customer Profile</a></br>
+	                <a href="{% url 'customer:order_history' request.user.id %}" class="btn_1 btn-block mobile_btn yellow"> Order History</a></br>
+					 
+			    </div>
+            </div>
+            <div class="col-lg-8">
+                <div id="wizard_container">
+                    <div id="top-wizard">
+                        <div id="progressbar"></div>
+                        <span id="location"></span>
+                    </div>
+
+                    <form class="form-horizontal" method="POST" action="">
+                        
+                        {% csrf_token %}
+                        {{ form|crispy}}
+                       
+                            <div id="bottom-wizard">
+                                
+                                <button type="submit" name="process" class="btn btn-primary button btn-lg btn-block">Make Payment  ₦{{ total_prices|intcomma }}</button>
+                            </div>
+
+                    </form>
+                </div>
+                <!-- /Wizard container -->
+                </div>
+            </div><!-- /Row -->
+        </div><!-- /Form_container -->
+    </div>
+{% endblock content %}

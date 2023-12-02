@@ -1,0 +1,261 @@
+{% extends 'bike/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+      
+
+
+
+      <div id="layoutSidenav">
+
+
+         <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+               <div class="sb-sidenav-menu">
+                  <div class="nav">
+                     <div class="sb-sidenav-menu-heading">Core</div>
+                     <a class="nav-link" href="index.html">
+                        <div class="sb-nav-link-icon"><i class="feather-home"></i></div>
+                        Dashboard
+                     </a>
+                     <a class="nav-link" href="messages.html">
+                        <div class="sb-nav-link-icon"><i class="feather-message-square"></i></div>
+                        Messages
+                     </a>
+                     <a class="nav-link" href="bookings.html">
+                        <div class="sb-nav-link-icon"><i class="feather-calendar"></i></div>
+                        Bookings <span class="badge badge-pill ml-2 badge-primary">6 New</span>
+                     </a>
+                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayoutss" aria-expanded="false" aria-controls="collapseLayoutss">
+                        <div class="sb-nav-link-icon"><i class="feather-list"></i></div>
+                        My listings
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                     </a>
+                     <div class="collapse" id="collapseLayoutss" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           <a class="nav-link" href="listings.html">Pending <span class="badge badge-pill ml-2 badge-primary">6</span></a>
+                           <a class="nav-link" href="listings.html">Active <span class="badge badge-pill ml-2 badge-success">5</span></a>
+                           <a class="nav-link" href="listings.html">Expired <span class="badge badge-pill ml-2 badge-danger">4</span></a>                                
+                        </nav>
+                     </div>
+                     <a class="nav-link" href="reviews.html">
+                        <div class="sb-nav-link-icon"><i class="feather-star"></i></div>
+                        Reviews
+                     </a>
+                     <a class="nav-link" href="bookmarks.html">
+                        <div class="sb-nav-link-icon"><i class="feather-heart"></i></div>
+                        Bookmarks
+                     </a>
+                     <a class="nav-link" href="add-listing.html">
+                        <div class="sb-nav-link-icon"><i class="feather-plus-circle"></i></div>
+                        Add listing
+                     </a>
+                     <a class="nav-link" href="add-listing-with-menu-list.html">
+                        <div class="sb-nav-link-icon"><i class="feather-book-open"></i></div>
+                        Menu List
+                     </a>
+                     <a class="nav-link" href="orders.html">
+                        <div class="sb-nav-link-icon"><i class="feather-shopping-cart"></i></div>
+                        Orders Page
+                     </a>
+                     <a class="nav-link" href="edit-order.html">
+                        <div class="sb-nav-link-icon"><i class="feather-settings"></i></div>
+                        Edit Order
+                     </a>
+                     <a class="nav-link" href="my-profile.html">
+                        <div class="sb-nav-link-icon"><i class="feather-user"></i></div>
+                        My Profile
+                     </a>
+                     <div class="sb-sidenav-menu-heading">Interface</div>
+                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="feather-layout"></i></div>
+                        Layouts
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                     </a>
+                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                           <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                           <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                        </nav>
+                     </div>
+                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        <div class="sb-nav-link-icon"><i class="feather-book"></i></div>
+                        Pages
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                     </a>
+                     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+                              Authentication
+                              <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                           </a>
+                           <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                              <nav class="sb-sidenav-menu-nested nav">
+                                 <a class="nav-link" href="login.html">Login</a>
+                                 <a class="nav-link" href="register.html">Register</a>
+                                 <a class="nav-link" href="password.html">Forgot Password</a>
+                              </nav>
+                           </div>
+                           <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
+                              Error
+                              <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                           </a>
+                           <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
+                              <nav class="sb-sidenav-menu-nested nav">
+                                 <a class="nav-link" href="401.html">401 Page</a>
+                                 <a class="nav-link" href="404.html">404 Page</a>
+                                 <a class="nav-link" href="500.html">500 Page</a>
+                              </nav>
+                           </div>
+                        </nav>
+                     </div>
+                     <div class="sb-sidenav-menu-heading">Addons</div>
+                     <a class="nav-link" href="charts.html">
+                        <div class="sb-nav-link-icon"><i class="feather-pie-chart"></i></div>
+                        Charts
+                     </a>
+                     <a class="nav-link" href="tables.html">
+                        <div class="sb-nav-link-icon"><i class="feather-grid"></i></div>
+                        Tables
+                     </a>
+                  </div>
+               </div>
+               <div class="sb-sidenav-footer">
+                  <div class="small">Logged in as:</div>
+                  Ask Bootstrap
+               </div>
+            </nav>
+         </div>
+
+
+         <div id="layoutSidenav_content">
+            <main>
+               <div class="container-fluid">
+                  <h1 class="mt-4">Orders</h1>
+                  <ol class="breadcrumb mb-4">
+                     <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                     <li class="breadcrumb-item active">{{ message.receiver_details.receiver_code }}</li>
+                  </ol>
+                  <div class="row">
+                     <div class="col-xl-12">
+                        <div class="card mb-4">
+                           <div class="card-header">
+                              <i class="fas fa-table mr-1"></i>
+                              Order Details
+                           </div>
+                           <div class="card-body">
+                              <div class="card mb-4 order-list">
+                                 <div class="gold-members p-4">
+                                    <a href="#">
+                                    </a>
+                                    <div class="media">
+                                       <a href="#">
+                                       <img class="mr-4" src="{{ message.image.url }}" alt="{{ message.nature_of_goods }}">
+                                       </a>
+                                       <div class="media-body">
+                                          <a href="#">
+                                          <span class="float-right text-success">Orderd on: {{ message.updated_at|naturaltime}} <i class="feather-check-circle text-success"></i></span>
+                                          </a>
+                                          <h6 class="mb-3"><a href="#">
+                                             </a><a href="#" class="text-dark">The Parcel: {{  message.nature_of_goods }} 
+                                              
+                                             </a>
+                                          </a><a href="#" class="text-dark">Sender Name:{{ message.sender.get_full_name|title }}
+                                          </a><a href="#" class="text-dark">Receiver Name:{{ message.receiver_details.fullname|title }}
+                                          </a>
+                                          </h6>
+                                          <p class="text-black-50 mb-1">Picking Address/Phone Number:<i class="feather-map-pin"></i> {{ message.receiver_details.picking_address }} - {{  message.receiver_details.telephone }}
+                                            <p class="text-black-50 mb-1">Delivering Address/Phone Number:<i class="feather-map-pin"></i> {{ message.receiver_details.deliver_address }} - {{  message.receiver_details.telephone }}
+                                          </p>
+                                          <p class="text-black-50 mb-3">{{ message.mins.created_at }}</p>
+                                          <p class="text-dark">Instruction:  {{ message.nature_of_goods }}
+                                          </p>
+                                          <hr>
+                                          <div class="float-right">
+
+                                             <a href="{% url 'bike:cancel-package' message.pk %}" class="btn btn-sm btn-warning"><i class="feather-message-circle"></i> Cancel </a>
+                                             <a href="{% url 'bike:package-complete' message.pk %}" class="btn btn-sm btn-success"><i class="feather-check-circle"></i> Deliver </a>
+                                          
+                                          </div>
+                                          <p class="mb-0 text-dark text-dark pt-2"><span class="text-dark font-weight-bold"> Total Paid:</span>  ₦{{ message.paid_amount|floatformat:2|intcomma}}
+                                          </p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="table-responsive">
+                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                       <tr>
+                                          <th>Item ID</th>
+                                          <th>Item</th>
+                                          <th>Quantity</th>
+                                          <th>Options</th>
+                                          <th>Edit</th>
+                                          <th>Price</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                       <tr>
+                                          <td>45</td>
+                                          <td>Enchiladas</td>
+                                          <td>2</td>
+                                          <td>Extra Tomato, Extra Pepper</td>
+                                          <td><a href="#0"><strong>Delete</strong></a></td>
+                                          <td>$12</td>
+                                       </tr>
+                                       <tr>
+                                          <td>48</td>
+                                          <td>Burrito</td>
+                                          <td>1</td>
+                                          <td>-</td>
+                                          <td><a href="#0"><strong>Delete</strong></a></td>
+                                          <td>$8</td>
+                                       </tr>
+                                       <tr>
+                                          <td>89</td>
+                                          <td>Chicken</td>
+                                          <td>1</td>
+                                          <td>-</td>
+                                          <td><a href="#0"><strong>Delete</strong></a></td>
+                                          <td>$10</td>
+                                       </tr>
+                                       <tr>
+                                          <td>83</td>
+                                          <td>Cheese Cake</td>
+                                          <td>2</td>
+                                          <td>-</td>
+                                          <td><a href="#0"><strong>Delete</strong></a></td>
+                                          <td>$20</td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                              <div class="row justify-content-end total_order">
+                                 <div class="col-xl-3 col-lg-4 col-md-5">
+                                    <ul class="list-unstyled text-muted font-weight-bold">
+                                       <li class="d-flex align-items-center justify-content-between">
+                                          <span>Subtotal</span> $40.00
+                                       </li>
+                                       <li class="d-flex align-items-center justify-content-between">
+                                          <span>Delivery Fee</span> $7.00
+                                       </li>
+                                       <li class="d-flex align-items-center justify-content-between text-danger">
+                                          <span>Total</span> $47.00
+                                       </li>
+                                    </ul>
+                                    <a href="#0" class="btn btn-success btn-block">Place Order</a>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </main>
+           
+
+{% endblock content %}

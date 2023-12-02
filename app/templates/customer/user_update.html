@@ -1,0 +1,8 @@
+<h2>Change Password</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ userForm.as_p }}
+    {{ form.as_p }}
+    <button type="submit">Update Profile</button>
+</form>
+<br>

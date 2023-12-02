@@ -1,0 +1,125 @@
+{% extends 'registrationbase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'registrationheader.html' %}
+
+	<div class="container">
+    <div id="form_container">
+        <div class="row no-gutters">
+            <div class="col-lg-4">
+                <div id="left_form">
+                    <h2 class="mb-0">Hi {{request.user.username|title}}
+                        <span class="mb-0">
+                        <hr/>KWIKY <p>... stressless delivery</p></span></h2>
+                    <div style="margin-top: -50px;">
+                        <a href="{% url 'customer:dashboard' %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">Dashboard</a></br>
+                        <a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">Customer Profile</a></br>
+                        <a href="{% url 'customer:order_history' request.user.id %}" class="btn_1 rounded yellow purchase mb-2" target="_parent">Order History</a></br>
+
+                        <a href="{% url 'customer:dashboard' %}" class="btn_1 mobile_btn  btn-block yellow btn-default mb-1 btn-lg btn-block">Dashboard</a></br>
+                        <a href="{% url 'customer:customer_profile' request.user.profilecustomer.id %}" class="btn_1 mb-1 btn-block mobile_btn yellow">Customer Profile</a></br>
+                        <a href="{% url 'customer:order_history' request.user.id %}" class="btn_1 btn-block mobile_btn yellow">Order History</a></br>
+                    
+                    </div> 
+			    </div>
+            </div>
+            <div class="col-lg-8">
+                <div id="wizard_container">
+                    <div id="top-wizard">
+                        <div id="progressbar"></div>
+                        <span id="location"></span>
+                    </div>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        {{ form.management_form }}
+                        {% for forms in form %}
+
+                        <div class="form-group col-sm-8"></div>
+
+                            <div class="row form-row spacer mt-3 ml-3">
+
+                                {{ forms }} <button class="btn btn-primary add-form-row">+</button>
+                            
+                            </div>
+
+                       
+                        
+                            {% endfor %}
+                            <div id="bottom-wizard">
+                                <button type="submit" name="process" class="btn btn-primary btn-lg btn-block">Place Order</button>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+                <!-- /Wizard container -->
+                </div>
+            </div><!-- /Row -->
+        </div><!-- /Form_container -->
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script type="text/javascript">
+function updateElementIndex(el, prefix, ndx) {
+    var id_regex = new RegExp('(' + prefix + '-\\d+)');
+    var replacement = prefix + '-' + ndx;
+    if ($(el).attr("for")) $(el).attr("for", $(el).attr("for").replace(id_regex, replacement));
+    if (el.id) el.id = el.id.replace(id_regex, replacement);
+    if (el.name) el.name = el.name.replace(id_regex, replacement);
+}
+function cloneMore(selector, prefix) {
+    var newElement = $(selector).clone(true);
+    var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+    newElement.find(':input:not([type=button]):not([type=submit]):not([type=reset])').each(function() {
+        var name = $(this).attr('name')
+        if(name) {
+            name = name.replace('-' + (total-1) + '-', '-' + total + '-');
+            var id = 'id_' + name;
+            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+        }
+    });
+    newElement.find('label').each(function() {
+        var forValue = $(this).attr('for');
+        if (forValue) {
+          forValue = forValue.replace('-' + (total-1) + '-', '-' + total + '-');
+          $(this).attr({'for': forValue});
+        }
+    });
+    total++;
+    $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+    $(selector).after(newElement);
+    var conditionRow = $('.form-row:not(:last)');
+    conditionRow.find('.btn.add-form-row')
+    .removeClass('btn-success').addClass('btn-danger')
+    .removeClass('add-form-row').addClass('remove-form-row')
+    .html('-');
+    return false;
+}
+function deleteForm(prefix, btn) {
+    var total = parseInt($('#id_' + prefix + '-TOTAL_FORMS').val());
+    if (total > 1){
+        btn.closest('.form-row').remove();
+        var forms = $('.form-row');
+        $('#id_' + prefix + '-TOTAL_FORMS').val(forms.length);
+        for (var i=0, formCount=forms.length; i<formCount; i++) {
+            $(forms.get(i)).find(':input').each(function() {
+                updateElementIndex(this, prefix, i);
+            });
+        }
+    }
+    return false;
+}
+$(document).on('click', '.add-form-row', function(e){
+    e.preventDefault();
+    cloneMore('.form-row:last', 'form');
+    return false;
+});
+$(document).on('click', '.remove-form-row', function(e){
+    e.preventDefault();
+    deleteForm('form', $(this));
+    return false;
+});
+</script>
+
+{% endblock content %}

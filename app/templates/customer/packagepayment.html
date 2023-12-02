@@ -1,0 +1,354 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+    
+      <section class="offer-dedicated-body pt-2 pb-2 mt-4 mb-4">
+        <div class="container">
+           <div class="row">
+            
+              <div class="col-md-8">
+
+                {% for message in messages %}
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong> {{ message }}!</strong>.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                {% endfor %}
+
+                <div class="bg-white p-4 shadow-lg mb-2">
+                    <div class="mb-2"><small>Order {{ package.receiver_code }}<a class="float-right font-weight-bold" href="#"><i class="icofont-headphone-alt"></i> HELP</a></small></div>
+                    <h6 class="mb-1 mt-1"><a href="detail.html" class="text-black">Sender: {{ package.sender.get_full_name }}
+                       </a>
+                    </h6>
+                    <p class="text-gray mb-0"><i class="icofont-clock-time"></i> {{ package.created_at|naturaltime }}</p>
+                    <p class="text-gray mb-0"><i class="icofont-clock-time"></i> {{ package.telephone }}</p>
+                    <br/>
+                    <p class="text-gray mb-0">
+                        <a href="{% url 'customer:edit-parcel-message' package.pk  details.pk %}">Edit Receiver Details &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </a>
+                        
+                            <a href="{% url 'customer:edit-parcel-package-message' package.pk  details.pk %}">Edit Package Details
+                                </a>
+                      
+                    </p>
+                 </div>
+                 <div class="bg-white p-4 shadow-lg">
+                    <div class="osahan-track-order-detail po">
+                       <h5 class="mt-0 mb-3">Order Details</h5>
+                       <div class="row">
+                          <div class="col-md-5">
+                             <small>DELIVERY DETAILS</small>
+                             <h6 class="mb-1 mt-1"><a href="detail.html" class="text-black"><i class="icofont-food-cart"></i> {{ package.fullname|title }}
+                                </a>
+                             </h6>
+                             <p class="text-gray mb-5">{{ package.picking_address  }}</p>
+                             <small>DELIVER TO</small>
+                             <h6 class="mb-1 mt-1"><span class="text-black"><i class="icofont-map-pins"></i> Address
+                                </span>
+                             </h6>
+                             <p class="text-gray mb-0">{{ package.deliver_address }}
+                             </p>
+                             <br/><br/>
+
+                            
+
+                          </div>
+                         
+                          <div class="col-md-7">
+   
+                             <div class="mb-2"><small><i class="icofont-list"></i> {{ details.nature_of_goods }} x {{ details.numbers }}</small></div>
+                             <p class="mb-2"><i class="icofont-ui-press text-danger food-item"></i>Weight: <span class="float-right text-secondary"> {{ details.weight }}</span></p>
+                             <p class="mb-2"><i class="icofont-ui-press text-success food-item"></i> Dimensions:   <span class="float-right text-secondary"> {{ details.dimensions }}</span></p>
+                             <p class="mb-2"><i class="icofont-ui-press text-success food-item"></i> Values  <span class="float-right text-secondary">{{ details.values }}</span></p>
+                             <p class="mb-2"><strong>Instruction:</strong>  {{ details.instruction }}</p>
+
+                            
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+                 <div class="bg-white p-4 shadow-lg mt-2">
+                    <div class="row text-center">
+                       <div class="col">
+                          <i class="icofont-tasks icofont-3x text-info"></i>
+                          <p class="mt-1 font-weight-bold text-dark mb-0">Order Received</p>
+                          <small class="text-info mb-0">NOW</small>
+                       </div>
+                       <div class="col">
+                          <i class="icofont-check-circled icofont-3x text-success"></i>
+                          <p class="mt-1 font-weight-bold text-dark mb-0">Order Confirmed</p>
+                          <small class="text-success mb-0">NEXT</small>
+                       </div>
+                       <div class="col">
+                          <i class="icofont-delivery-time icofont-3x text-primary"></i>
+                          <p class="mt-1 font-weight-bold text-dark mb-0">Order Picked Up</p>
+                          <small class="text-primary mb-0">LATER (ET : 30min)</small>
+                       </div>
+                    </div>
+                    <br/>
+                  
+                 </div>
+                 
+
+                
+              </div>
+              <div class="col-md-4">
+                <div class="generator-bg rounded shadow-sm mb-4 p-4 osahan-cart-item">
+                   <div class="d-flex mb-4 osahan-cart-item-profile">
+                     
+                      <div class="d-flex flex-column">
+                         <h6 class="mb-1 text-white">{{ package.fullname|title }}
+                         </h6>
+                         <p class="mb-0 text-white"><i class="icofont-location-pin"></i> {{ package.deliver_address }} </p>
+                         <p class="mb-0 text-white"><i class="icofont-location-pin"></i> {{ package.picking_address }} </p>
+                      </div>
+                   </div>
+                   
+                  
+                   <div class="mb-2 bg-white rounded p-2 clearfix">
+                      <p class="mb-1">Delivery Distance <span class="float-right text-dark">{{ distance.distance.text }}</span></p>
+                      <p class="mb-1">Delivery Time <span class="float-right text-dark">{{ distance.duration.text }}</span></p>
+                      
+                      <p class="mb-1">Service Charges For Delivery <span class="text-info" data-toggle="tooltip" data-placement="top" title="Total discount breakup">
+                         <i class="icofont-info-circle"></i>
+                         </span> <span class="float-right text-dark">₦200.00</span>
+                      </p>
+
+                     {% if request.user.subscriber.active  %}
+
+                           <p class="mb-1 text-warning">Total Delivery
+                                          
+                              <span class="float-right text-success">₦00:00</span>
+                           </p>
+
+                           <hr />
+                        
+                           <h6 class="font-weight-bold mb-0">TO PAY  <span class="float-right">₦0:00</span></h6>
+                     {% else %}
+                      
+
+                           {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_package < 1000.00 %}
+
+                                 {% with alpha=1000|multiply:0.075 beta=1000 omega=200 %}
+                                 
+                                    <p class="mb-1 text-info">VAT
+                                    
+                                       <span class="float-right text-warning">₦{{ alpha|floatformat:0 }}</span>
+                                    </p>
+                                                      
+                                 <p class="mb-1 text-warning">Total Delivery
+                                    
+                                    <span class="float-right text-success">₦1,000:00</span>
+                                 </p>
+
+                                       <hr />
+                                    
+                                       <h6 class="font-weight-bold mb-0">TO PAY  <span class="float-right">₦{{ alpha|addition:beta|add:omega|floatformat:2|intcomma }}</span></h6>
+                              
+                                 {% endwith %}
+
+                           {% else %}
+
+                                 {% with alpha=distance.distance.text|slice:':-2'|mul:settings.distance_price_package beta=200  %}
+
+                                 <p class="mb-1 text-info">VAT
+                                    
+                                    
+                                    <span class="float-right text-warning">₦{{ alpha|mul:0.075|floatformat:2|intcomma  }}</span>
+
+                                 </p>
+
+                                 <p class="mb-1 text-warning">Total Delivery
+                                    
+                                    <span class="float-right text-success">₦{{ alpha|floatformat:2|intcomma }}</span>
+                                 </p>
+                                    
+                                 <hr />
+                                 <h6 class="font-weight-bold mb-0">TO PAY  <span class="float-right">₦{{ alpha|mul:0.075|addition:alpha|add:beta|floatformat:2|floatformat:2|intcomma }}</span></h6>
+                                 
+                                 {% endwith %}
+
+                           {% endif %}
+
+                     {% endif %}
+                     
+
+
+                      
+                      
+                   </div>
+
+                   
+                   {% if request.user.subscriber.active  %}
+
+                     
+                                       
+                           
+                        <a href="{% url 'customer:payment-parcel-package-subscription' details.pk distance.distance.text|slice:':-2' package.receiver_code %}" class="btn btn-primary btn-block btn-lg">Process Your Order</a>
+
+                       
+                        
+
+                   {% else %}
+
+
+                        {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_package < 1000.00 %}
+
+                              {% with alpha=1000|multiply:0.075 beta=1000 omega=200 %}
+                           
+                                 <form>
+
+                                       <script src="https://js.paystack.co/v1/inline.js"></script>
+                                       <button class="btn btn-success btn-block btn-lg" type="button" onclick="payWithPaystack()" id="payment-submit">MAKE PAYMENT ₦{{ alpha|addition:beta|add:omega|floatformat:2|intcomma }} </button></a>
+                                       <a href="{% url 'customer:pay-on-delivery' details.pk alpha|addition:beta|add:omega|floatformat:2|intcomma  distance.duration.text|slice:':-4' distance.distance.text|slice:':-2' package.receiver_code  %}" class="btn btn-primary btn-block btn-lg">PAY ON DELIVERY ₦{{ alpha|addition:beta|add:omega|floatformat:2|intcomma }}</a>
+
+                                 </form>
+                           
+                              {% endwith %}
+
+                        {% else %}
+
+                                 {% with alpha=distance.distance.text|slice:':-2'|mul:settings.distance_price_package beta=200  %}
+                                    
+                                 <form>
+                              
+                                       <script src="https://js.paystack.co/v1/inline.js"></script>
+                                       <button class="btn btn-success btn-block btn-lg" type="button" onclick="payWithPaystack()" id="payment-submit">MAKE PAYMENT ₦{{ alpha|mul:0.075|addition:alpha|add:beta|floatformat:2|intcomma }} </button></a>
+                                       <a href="{% url 'customer:pay-on-delivery' details.pk alpha|mul:0.075|addition:alpha|add:beta  distance.duration.text|slice:':-4' distance.distance.text|slice:':-2' package.receiver_code  %}" class="btn btn-primary btn-block btn-lg">PAY ON DELIVERY ₦{{ alpha|mul:0.075|addition:alpha|add:beta|floatformat:2|intcomma }}</a>
+
+                                    
+                                 </form>
+                                 
+                                 {% endwith %}
+
+                        {% endif %}
+
+                  {% endif %}
+        
+                 
+
+                 
+
+
+
+                </div>
+                <div class="pt-2"></div>
+
+               
+             </div>
+          </div>
+             
+           </div>
+        </div>
+     </section> 
+
+
+
+       <!-- place below the html form -->
+       <script>
+                     
+        function payWithPaystack() {
+
+           var handler = PaystackPop.setup({ 
+              key: '{{ PAY_STACK_KEY }}', //put your public key here pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa
+              email: '{{ package.sender.email }}', //put your customer's email here
+              
+
+                {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_package < 1000.00 %}
+
+                    {% with alpha=1000|multiply:0.075 beta=1000 omega=200 %}
+         
+                            amount: {{ alpha|addition:beta|add:omega }} * 100,
+          
+                    {% endwith %}
+
+                {% else %}
+
+                    {% with alpha=distance.distance.text|slice:':-2'|mul:settings.distance_price_package beta=200  %}
+                                   
+                        amount: {{  alpha|mul:0.075|addition:alpha|add:beta }} * 100,
+          
+                    {% endwith %}
+
+                {% endif %}
+   
+               
+
+              currency: "NGN",
+              ref: "{{ package.receiver_code }}", // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+              firstname: '{{ package.sender.first_name  }}',
+              lastname: '{{ package.sender.last_name }}',
+
+              
+              
+              onClose: function(){
+
+                 window.location.replace("{% url 'customer:failed-package-payment' package.pk %}");
+                 
+              },
+              metadata: {
+                 custom_fields: [
+                    {
+                       display_name: "{{  package.sender.first_name }}",
+                       variable_name: "{{  package.sender.last_name  }}",
+                       value: "{{  package.sender.get_full_name }}"
+                    }
+                 ]
+              },
+
+           
+
+
+           callback: function(response){
+             
+
+              {% if  distance.distance.text|slice:':-2'|mul:settings.distance_price_package < 1000.00 %}
+
+                {% with alpha=1000|multiply:0.075 beta=1000 omega=200 %}
+    
+                window.location.replace("{% url 'customer:package-verify-payment' details.pk alpha|addition:beta|add:omega distance.duration.text|slice:':-4'  distance.distance.text|slice:':-2' %}?ref="+response.reference);
+
+
+        
+                {% endwith %}
+
+          {% else %}
+
+              {% with alpha=distance.distance.text|slice:':-2'|mul:settings.distance_price_package beta=200  %}
+                             
+                 
+              window.location.replace("{% url 'customer:package-verify-payment' details.pk alpha|mul:0.075|addition:alpha|add:beta distance.duration.text|slice:':-4'  distance.distance.text|slice:':-2' %}?ref="+response.reference);
+
+
+              {% endwith %}
+
+          {% endif %}
+
+             
+            
+                                                                   
+                
+
+           },
+              
+              
+           });
+           handler.openIframe(); //open the paystack's payment modal
+     }
+
+
+
+
+
+     </script>
+
+{% endblock content %}

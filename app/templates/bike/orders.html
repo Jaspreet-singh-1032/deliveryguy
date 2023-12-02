@@ -1,0 +1,97 @@
+{% extends 'registrationbase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+{% block content %}
+{% include 'registrationheader.html' %}
+    
+
+	<div class="container">
+    <div id="form_container">
+        <div class="row no-gutters">
+
+            <div class="col-lg-4">
+                <div id="left_form">
+                    <h2 class="mb-0">Hi {{request.user.username|title}}
+                        <span class="mb-0">
+                        <hr/>KWIKY <p>... stressless delivery</p></span></h2>
+                <div class="myspace">
+
+                        <a href="{% url 'bike:dashboard' %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">Dashboard</a></br>
+                        <a href="{% url 'bike:bike_profile' request.user.profilebike.id %}" class="mb-3 btn_1 rounded yellow purchase" target="_parent">bike Profile</a></br>
+                        <a href="{% url 'bike:order_delivery' %}" class="btn_1 rounded yellow purchase mb-2" target="_parent">Orders</a></br>
+
+                        <a href="{% url 'bike:dashboard' %}" class="btn_1 mobile_btn  btn-block yellow btn-default mb-1">Dashboard</a></br>
+                        <a href="{% url 'bike:bike_profile' request.user.profilebike.id %}" class="btn_1 mb-1 btn-block mobile_btn yellow">Bike Profile</a></br>
+                        <a href="{% url 'bike:order_delivery' %}" class="btn_1 btn-block mobile_btn yellow">Orders</a></br>
+
+                        
+                        <br/><br/>
+                    </div>
+			    </div>
+            </div>
+            <div class="col-lg-8">
+                <div id="wizard_container">
+                    <div id="top-wizard">
+                        <div id="progressbar"></div>
+                        <span id="location"></span>
+                    </div>
+                    <table class="table table-responsive-sm table-dark">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Item</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for o in orders.order.all %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{o.subcategory}}</td>
+                                <td style="text-align: center;">{{o.quantity}}</td>
+                                <td>₦{{o.subcategory.price}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                        <h6 style="font-size: 12px;"><b>Vendor Name:</b> {{ order.category.name }}</h6>
+                        <h6 style="font-size: 12px;"><b>Vendor Address:</b> {{ order.category.address }}</h6>
+                        <h6 style="font-size: 12px;"><b>Customer Address:</b> {{orders.shipping_address}}</h6>
+                        <h6 style="font-size: 12px;"><b>Phone Number:</b> {{orders.user.profilecustomer.phone_number}}</h6>
+                        <h6 style="font-size: 12px;"><b>Order Note:</b> {{orders.ordernote}}</h6>
+                        <h6 style="font-size: 12px;"><b>Order Package:</b> {{orders.package.name}}</h6>
+                        
+                        <form method='POST'>
+                        {% csrf_token %}
+                        <div id="bottom-wizard">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Accept</button>
+                        </div>
+                        </form>
+
+                        {% comment %} {% if o.paid == False %}
+                                    <a href="{% url 'customer:payment' orders.id %}"><span class="badge badge-danger">Pay Now</span></a>
+                                {% else %}
+                                <span class="badge badge-warning">Paid</span>
+                                {% endif %}
+                                {% if orders.received == False %}
+                                <span class="badge badge-info">Processing</span>
+                                   
+                                {% else %}
+                                <span class="badge badge-dark">Receieved</span>
+                                {% endif %} {% endcomment %}
+
+                    
+                </div>
+                <!-- /Wizard container -->
+            </div>
+        </div><!-- /Row -->
+    </div><!-- /Form_container -->
+    </div>
+
+{% endblock content %}
+
+
+

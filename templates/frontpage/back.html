@@ -1,0 +1,931 @@
+{% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+
+<style>
+table { width: 100%; text-align: left; border-spacing: 0; border-collapse: collapse; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+th, td { font-family: inherit; font-size: 1em; line-height: 1.45; color: #444; vertical-align: middle; padding: 1em; }
+th { font-weight: 700; }
+
+colgroup:nth-child(1) { width: 31%; border: 0 none; }
+colgroup:nth-child(2) { width: 22%; border: 1px solid #ccc; }
+colgroup:nth-child(3) { width: 25%; border: 10px solid #59c7fb; }
+colgroup:nth-child(4) { width: 22%; border: 1px solid #ccc; }
+
+/* Tablehead */
+
+thead th { background: #def4fe; background: -moz-linear-gradient(top,  #ffffff 0%, #f5f5f5 100%); background: -webkit-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%); background: -o-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%); background: -ms-linear-gradient(top,  #ffffff 0%,#f5f5f5 100%); background: linear-gradient(to bottom,  #ffffff 0%,#f5f5f5 100%); text-align: center; position: relative; border-bottom: 1px solid #ccc; padding: 3em 0 2em; font-weight: 400; color: #999; }
+thead th:nth-child(1) { background: transparent;  }
+thead th:nth-child(3) {  padding: 2em 0 5em; }
+thead th h2 { font-weight: 300; font-size: 2.4em; line-height: 1.2; color: #59c7fb; }
+thead th h2 + p { font-size: 1.25em; line-height: 1.4; }
+thead th:nth-child(3) h2 { font-size: 3.6em; }
+thead th:nth-child(3) h2 + p { font-size: 1.5em; }
+
+thead th p.promo { font-size: 1em; color: #fff; position: absolute; top: 9em; left: -17px; z-index: 1000; width: 100%; margin: 0; padding: .625em 17px .75em; background: #c00; box-shadow: 0 2px 4px rgba(0,0,0,.25); border-bottom: 1px solid #900; }
+
+thead th p.promo:before { content: ""; position: absolute; display: block; width: 0px; height: 0px; border-style: solid; border-width: 0 7px 7px 0; border-color: transparent #900 transparent transparent; bottom: -7px; left: 0; }
+thead th p.promo:after { content: ""; position: absolute; display: block; width: 0px; height: 0px; border-style: solid; border-width: 7px 7px 0 0; border-color: #900 transparent transparent transparent; bottom: -7px; right: 0; }
+
+/* Tablebody */
+
+tbody th { background: #fff; border-left: 1px solid #ccc; }
+tbody th span { font-weight: normal; font-size: 87.5%; color: #999; display: block; }
+
+tbody td { background: #fff; text-align: center; }
+
+tbody tr:nth-child(even) th,
+tbody tr:nth-child(even) td { background: #f5f5f5; border: 1px solid #ccc; border-width: 1px 0 1px 1px; }
+tbody tr:last-child td { border-bottom: 0 none; }
+
+/* Tablefooter */
+
+tfoot th  { padding: 2em 1em; border-top: 1px solid #ccc; }
+tfoot td  { text-align: center; padding: 2em 1em; border-top: 1px solid #ccc; }
+
+tfoot a  { font-weight: bold; color: #fff; text-decoration: none; text-transform: uppercase; display: block; padding: 1.125em 2em; background: #59c7fb; border-radius: .5em; }
+
+
+</style>
+    
+      <section class="pt-5 pb-5 homepage-search-block position-relative" style="background: url(/static/web/city_01.jpg) no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;">
+         <div class="banner-overlay"></div>
+         <div class="container">
+            <div class="row d-flex align-items-center">
+               <div class="col-md-12">
+                  <div class="homepage-search-title">
+                     <h1 class="mb-2 font-weight-normal"><span class="font-weight-bold">Find Awesome Deals</span> in Abuja | Abeokuta | Kaduna</h1>
+                     <h5 class="mb-5 text-secondary font-weight-normal" style="color: white;">Lists of top restaurants, cafes, pubs, and bars, based on trends</h5>
+                  </div>
+                  
+                  <div class="homepage-search-form" >
+
+                     
+
+
+                     
+                     <!-- <form action="/customer/search/" class="form-noborder" method='get'> -->
+
+                        <form method="get" id="personForm" data-cities-url="{% url 'load-vendor' %}" action="{% url 'customer:search-results' %}" novalidate>
+                       
+                           {% csrf_token %}
+
+                         
+
+                           <div class="form-row">
+                              <div class="col-lg-5 col-md-5 col-sm-12 form-group">
+                                 <div class="location-dropdown" >
+                                    
+                                    <select class="custom-select form-control-lg"  name="city" id="id_city" style="height: 50px;">
+                                       <option style="padding-left:12px;"> Quick Searches </option>
+
+                                             {% for ct in city %}
+                                                
+                                                <option value='{{ ct.pk }}'> {{ ct.name }} </option>
+                                       
+                                             {% endfor %}
+                                       
+                                    </select>
+                                 </div>
+                              </div>
+                              <div class="col-lg-5 col-md-5 col-sm-12 form-group">
+                                 <div class="location-dropdown">
+                                  
+                                    <select class="custom-select form-control-lg" name="location" id="id_location" style="height: 50px;">
+                                       <option> Quick Searches </option>
+                                       
+                                    </select>
+                                 </div>
+                              </div>
+                              <!-- 
+                              <div class="col-lg-4 col-md-4 col-sm-12 form-group">
+                                 <input type="text" name="location" placeholder="Enter your delivery location" class="form-control form-control-lg">
+                                 <a class="locate-me" href="#"><i class="icofont-ui-pointer"></i> Locate Me</a>
+                              </div>
+                              -->
+                              <div class="col-lg-2 col-md-2 col-sm-12 form-group">
+                                 <!-- <a href="listing.html" class="btn btn-primary btn-block btn-lg btn-gradient">Search</a> -->
+                                 <button type="submit" class="btn btn-primary btn-block btn-lg btn-gradient">Search</button>
+                              </div>
+                           </div>
+                     </form>
+               </div>
+                 
+                  
+                  <h6 class="mt-4 text-shadow font-weight-normal">E.g. Beverages, Pizzas, Chinese, Bakery, Indian... <a href="{% url 'customer:parcel-message' %}"> Send Message </a></h6>
+                  <div class="owl-carousel owl-carousel-category owl-theme">
+                     {% for fd in good  %}
+                     
+                     
+                        <div class="item">
+                           <div class="osahan-category-item">
+                              <a href="{% url 'customer:all-vendors-good' fd.vendor.pk %}">
+                                 <img class="img-fluid" src="{{ fd.image.url }}" alt="{{ fd.name }}">
+                                 <h6>{{ fd.name }}</h6>
+                                 <p>₦{{ fd.price }}</p>
+                              </a>
+                           </div>
+                        </div>
+
+                     {% endfor %}
+                  </div>
+               </div>
+             
+            </div>
+         </div>
+      </section>
+      <section class="section pt-5 pb-5 bg-white homepage-add-section">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-3 col-6">
+                  <div class="products-box">
+                     <a href="{% url 'customer:parcel-message' %}"><img alt="" src="{% static 'web/delivery.png' %}" style="height: 252px; width: 252px;" class="img-fluid rounded"></a>
+                  </div>
+               </div>
+               <div class="col-md-3 col-6">
+                  <div class="products-box">
+                     <a href="#"><img alt="" src="{% static 'web/Food_Delivery.jpg' %}" class="img-fluid rounded" style="height: 252px; width: 252px;"></a>
+                  </div>
+               </div>
+               <div class="col-md-3 col-6">
+                  <div class="products-box">
+                     <a href="#"><img alt="" src="{% static 'web/Special_Delivery.jpg' %}" class="img-fluid rounded"></a>
+                  </div>
+               </div>
+               <div class="col-md-3 col-6">
+                  <div class="products-box">
+                     <a href="#"><img alt="" src="{% static 'web/Grocery_Delivery.jpg' %}" class="img-fluid rounded"></a>
+                  </div>
+               </div>
+            </div>
+
+
+         </div>
+      </section>
+      <section class="section pt-5 pb-5 products-section">
+         <div class="container">
+            <div class="section-header text-center">
+               <h2>Our Partner Vendor in City</h2>
+               <p>Top restaurants, cafes, pubs, and bars in Abuja, Abeokuta, Kaduna based on trends</p>
+               <span class="line"></span>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="owl-carousel owl-carousel-four owl-theme">
+                       {% for rs  in vendor  %}
+
+                     
+                       {% if rs.type.name == 'Restaurant' and rs.promo == True%}
+                           
+                       
+
+                              <div class="item">
+                                 <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+                                    <div class="list-card-image">
+                                       <div class="star position-absolute"><span class="badge badge-success"><i class="icofont-star"></i> {{ rs.type.name }}</span></div>
+                                       <div class="favourite-heart text-danger position-absolute"><a href="{{ rs.get_absolute_url }}"><i class="icofont-heart"></i></a></div>
+                                       <div class="member-plan position-absolute"><span class="badge badge-dark">PROMOTED</span></div>
+                                       <a href="{% url 'customer:all-vendors-good' rs.pk %}">
+                                       <img src="{{ rs.picture.url }}" class="img-fluid item-img" style="height: 170px; width: 100%;">
+                                       </a>
+                                    </div>
+                                    <div class="p-3 position-relative">
+                                       <div class="list-card-body">
+                                          <h6 class="mb-1"><a href="{{ rs.get_absolute_url }}" class="text-black">{{ rs.name }}</a></h6>
+                                          <p class="text-gray mb-3">{{ rs.location }}</p>
+                                          <p class="text-gray mb-3 time"><span class="bg-light text-dark rounded-sm pl-2 pb-1 pt-1 pr-2">
+                                             <i class="icofont-wall-clock"></i>  {{ rs.opening_time|date:"H:i"  }} -  {{ rs.closing_time|date:"H:i"  }} </span> 
+                                                <span class="float-right text-black-50">OPENED</span></p>
+                                       </div>
+                                       <div class="list-card-badge">
+                                          <span class="badge badge-success"></span> <small>{{ rs.fulladdress }}</small>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           
+          
+
+                              {% endif %}
+
+                    
+                        {% endfor %}
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="container">
+                  
+                  <br/> <br/>
+               
+                  <h4 class="font-weight-bold mt-0 mb-4">Other Vendors</h4>
+                  <div class="row">
+
+                        {% for vd in allvendor %}
+                        
+                        {% if vd.promo == False %}
+                        
+                       
+                        
+                        
+                       
+
+                              <div class="col-md-4 col-sm-6 mb-4 pb-2">
+                                 <div class="list-card bg-white h-100 rounded overflow-hidden position-relative shadow-sm">
+                                    <div class="list-card-image">
+                                       <div class="star position-absolute"><span class="badge badge-success"><i class="icofont-star"></i>{{ vd.type.name }}</span></div>
+                                       <div class="favourite-heart text-danger position-absolute"><a href="{{ vd.get_absolute_url }}"><i class="icofont-heart"></i></a></div>
+                                       <div class="member-plan position-absolute"><span class="badge badge-dark">VENDOR</span></div>
+                                       <a href="{{ vd.get_absolute_url }}">
+                                       <img src="{{ vd.picture.url }}" class="img-fluid item-img"  style="height: 170px; width: 100%;">
+                                       </a>
+                                    </div>
+                                    <div class="p-3 position-relative">
+                                       <div class="list-card-body">
+                                          <h6 class="mb-1"><a href="{{ vd.get_absolute_url }}" class="text-black">{{ vd.name }}
+                                             </a>
+                                          </h6>
+                                          <p class="text-gray mb-3">{{ vd.location }}</p>
+                                          <p class="text-gray mb-3 time"><span class="bg-light text-dark rounded-sm pl-2 pb-1 pt-1 pr-2"><i class="icofont-wall-clock"></i> {{ vd.opening_time|date:"H:i"  }} -  {{ vd.closing_time|date:"H:i"  }} </span> <span class="float-right text-black-50"> OPENED </span></p>
+                                         
+                                       </div>
+                                       <div class="list-card-badge">
+                                             <span class="badge badge-success">{{ vd.location }}</span> <small>{{ vd.fulladdress }}</small>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                           
+                              {% endif %}
+
+
+                        {% endfor %}
+                    
+                     <div class="col-md-12 text-center load-more">
+                        <button class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                        </button>   
+                     </div>
+                  </div>
+            
+     
+         </div>
+      </section>
+
+    
+      <section class="video-tutorial bg-gray" id="demo">
+         <div class="container">
+            <div class="section-header text-center">
+               <h2>You can Subscribe To our Package</h2>
+               <p>Kindly safe money and Time with this Package</p>
+               <span class="line"></span>
+            </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <table>
+
+                        <colgroup></colgroup>
+                        <colgroup></colgroup>
+                        <colgroup></colgroup>
+                        <colgroup></colgroup>
+
+                        <thead>
+                           <tr>
+                              <th>&nbsp;</th>
+
+                              {% for sb in sub %}
+                                    {% if sb.name == 'Plus' %}
+                                 
+                                       <th>
+                                          <h2>{{ sb.name|title }}</h2>
+                                          <p>₦{{ sb.price|intcomma }}</p>
+                                          <p class="promo">Our most valuable package!</p>
+                                       </th>
+
+                                    {% else %}
+
+                                       <th>
+                                          <h2>{{ sb.name|title }}</h2>
+                                          <p>₦{{ sb.price|intcomma }}</p>
+                                       </th>
+
+
+                                    {% endif %}
+
+                              {% endfor %}
+                            
+
+
+                            
+                           </tr>
+                        </thead>
+
+                        <tfoot>
+                           <tr>
+                              <th>&nbsp;</th>
+                              {% for sb in sub %}
+                              <td><a href="{% url 'customer:subscription-package' sb.pk %}">Start Now</a></td>
+                              {% endfor %}
+                           </tr>
+                        </tfoot>
+
+                        <tbody>
+                           <tr>
+                              <th>Number of Distance<span>The Numbers of Kilometter for the Package.</span></th>
+                              <td>200 KM</td>
+                              <td>500 KM</td>
+                              <td>1000 KM</td>
+                           </tr>
+                           <tr>
+                              <th>Package Duration <span>Expected Time to Use Your Subscription.</span></th>
+                              <td>No Time Cap</td>
+                              <td>No Time Cap</td>
+                              <td>No Time Cap</td>
+                           </tr>
+
+                           <tr>
+                              <th>Amount Saved <span>The mount save for the package</span></th>
+                              <td>₦1,000</td>
+                              <td>₦2,000</td>
+                              <td>₦20,000</td>
+                           </tr>
+                           <tr>
+                              <th>Service Charges <span>Do I need to Pay Service Charges after Subscription</span></th>
+                              <td>&mdash;</td>
+                              <td>&mdash;</td>
+                              <td>&mdash;</td>
+                           </tr>
+                           <!--
+                              <tr>
+                                 <th>Feature "Lorem ipsum" <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</span></th>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>&mdash;</td>
+                              </tr>
+                              <tr>
+                                 <th>Feature "Lorem ipsum" <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></th>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>&mdash;</td>
+                              </tr>
+                              <tr>
+                                 <th>Feature "Lorem ipsum" <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></th>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>&mdash;</td>
+                                 <td>&mdash;</td>
+                              </tr>
+                              <tr>
+                                 <th>Feature "Lorem ipsum" <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</span></th>
+                                 <td>Lorem ipsum dolor sit amet</td>
+                                 <td>&mdash;</td>
+                                 <td>&mdash;</td>
+                              </tr>
+                           -->
+                           </tr>
+                        </tbody>
+
+                     </table>   
+                  </div>
+               </div>
+         </div>
+         <br> <br> <br> <br>
+      </section>
+
+
+      
+      
+      <div hidden="hidden">
+         <form method="post" id="personForm" data-cities-url="{% url 'load-vendor' %}" novalidate>
+            {% csrf_token %}
+            <table>
+            {{ forms.as_table }}
+            </table>
+            <button type="submit">Save</button>
+         
+         </form>
+      </div>
+      
+      
+     
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+{% load static %}
+{% load humanize %}
+{% load cart_template_tags %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light osahan-nav shadow-sm">
+    <div class="container">
+       <a class="navbar-brand" href="/"><img alt="DishAxis" src="{% static 'web/dishaxis_logo.png' %}" style="width: 128px;"></a>
+       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+       <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ml-auto">
+             <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+             </li>
+
+             <li class="nav-item">
+               <a class="nav-link" href="#"> About Us</a>
+            </li>
+
+
+            <li class="nav-item">
+               <a class="nav-link" href="{% url 'customer:parcel-message' %}"> Logistics </a>
+            </li>
+
+            {% for ty in alltype  %}
+               <li class="nav-item">
+                  <a class="nav-link" href="{% url 'all-vendors-type' ty.name %}"> {{ ty.name|title }}</a>
+               </li>
+            {% endfor %}
+
+          
+
+
+            
+
+             <li class="nav-item">
+                <a class="nav-link" href="#"><i class="icofont-sale-discount"></i> Special Delivery <span class="badge badge-danger">New</span></a>
+             </li>
+
+
+            
+
+           
+
+
+             {% if request.user.is_authenticated  %}
+
+             <!--
+               <li class="nav-item">
+                  <a class="nav-link" href="#"> Track Order</a>
+               </li>
+            -->
+            
+
+
+             <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img alt="Generic placeholder image" src="{{ request.user.profilecustomer.image.url }}" class="nav-osahan-pic rounded-pill"> My Account
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow-sm border-0">
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}"><i class="icofont-food-cart"></i> Food Orders</a>
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}#parcel"><i class="icofont-ui-message"></i> Parcel Orders</a>
+                  
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}#favourites"><i class="icofont-heart"></i> Favourites</a>
+
+                   
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}#subscription"><i class="icofont-credit-card"></i> Subscription</a>
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}#addresses"><i class="icofont-location-pin"></i> Addresses</a>
+                   <a class="dropdown-item" href="{% url 'customer:my-order' %}#profile"><i class="icofont-ui-user"></i> My Profile</a>
+                   <a class="dropdown-item" href="{% url 'customer:change-password' %}"><i class="icofont-ui-user"></i> Change Password</a>
+                   <a class="dropdown-item" href="{% url 'logout' %}"><i class="icofont-location-pin"></i> Logout</a>
+                </div>
+             </li>
+
+
+              
+
+                     
+               <li class="nav-item dropdown dropdown-cart">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-shopping-basket"></i> Cart
+                  <span class="badge badge-success">{{ request.user|cart_item_count }}</span>
+                  </a>
+                  <div class="dropdown-menu dropdown-cart-top p-0 dropdown-menu-right shadow-sm border-0">
+                    
+                     <div class="dropdown-cart-top-body border-top p-4">
+                        {% for order_item in user_order.items.all %}
+
+                           <p class="mb-2"><i class="icofont-ui-press text-danger food-item"></i> {{ order_item.item.name|title }} x {{ order_item.quantity }}   
+                              <span class="float-right text-secondary">₦{{ order_item.get_total_item_price}}</span></p>
+
+                        {% endfor %}
+                       
+                     </div>
+
+                     <div class="dropdown-cart-top-footer border-top p-4">
+                        <p class="mb-0 font-weight-bold text-secondary">Sub Total <span class="float-right text-dark">₦{{ user_order.get_tax_total|floatformat:2|intcomma }}</span></p>
+                        <small class="text-info">Without Delivery</small>  
+                     </div>
+                     <div class="dropdown-cart-top-footer border-top p-2">
+                        <a class="btn btn-success btn-block btn-lg" href="{% url 'customer:order-summary' %}"> Checkout</a>
+                     </div>
+
+                     
+                  </div>
+               </li>
+
+           
+
+              
+
+            {% else %}
+
+
+               <li class="nav-item dropdown">
+                  <a class="nav-link" href="{% url 'login' %}" role="button" aria-haspopup="true" aria-expanded="false">
+                  <img alt="User" src="{% static 'web/pic.jpg' %}" class="nav-osahan-pic rounded-pill"> Login
+                  </a>
+                  
+               </li>
+
+
+                  <li class="nav-item dropdown dropdown-cart">
+                     <a class="nav-link" href="{% url 'customer:order-summary' %}"   aria-haspopup="true" aria-expanded="false">
+                     <i class="fas fa-shopping-basket"></i> Cart
+                     <span class="badge badge-success">0</span>
+                     </a>
+                  
+                  </li>
+
+
+            {% endif %}
+
+
+
+
+          </ul>
+       </div>
+    </div>
+ </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {% extends 'frontpage/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% load humanize %}
+{% load mathfilters %}
+{% load cart_template_tags %}
+{% load multiplication_tag %}
+
+
+
+    <!-- search popup area start -->
+    <div class="body-overlay" id="body-overlay"></div>
+    <div class="td-search-popup" id="td-search-popup">
+        <form action="index.html" class="search-form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search.....">
+            </div>
+            <button type="submit" class="submit-btn"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <!-- //. search Popup -->
+
+   
+
+    <!-- Banner Area Start-->
+    <section class="banner-area banner-area-2">
+        <div class="banner-thumb">
+            <img src="{% static 'app/assets/img//home-3/banner-bg.png' %}" alt="img">
+        </div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 align-self-center">
+                    <div class="banner-inner text-center">
+                        <h1>Located in one place during demand & runtime</h1>
+                        <form>
+                            <div class="single-input-wrap mb-0 with-btn">
+                                <input type="email" placeholder="Enter your delivery location">
+                                <button class="btn btn-base">Search your location</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Area End --> 
+    
+    <section class="offer-area pd-top-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 align-self-center d-contents">
+                    <div class="single-offer-wrap" style="background-color: var(--main-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/1.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h2>Special Deliciaus </h2>
+                            <h5>Maxican Pizza Testes Better</h5>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                        <div class="offer-sticker">
+                            <img src="{% static 'app/assets/img/offer/offer.png' %}" alt="img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <div class="single-offer-wrap" style="background-color: var(--heading-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/offer/2.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h3>Enjoy Our Delicious Item</h3>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                    </div>
+                    <div class="single-offer-wrap" style="background-color: #FFEECC">
+                        <div class="animated-img"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="animated-img animated-img-2"><img src="{% static 'app/assets/img/offer/03.png' %}" alt="img"></div>
+                        <div class="overlay-gradient"></div>
+                        <div class="wrap-details">
+                            <h3 class="text-heading">The Fastest In Delivery <span>Food</span></h3>
+                            <a class="btn btn-white" href="shop.html">ORDER NOW</a>
+                        </div>
+                        <img class="bg-img-2" src="assets/img/offer/3.png" alt="img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="offer-area pd-bottom-90">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 align-self-center d-contents">
+                    <div class="single-offer-wrap single-offer-wrap-2" style="background-color: var(--secondary-color);">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/1.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h4>Double Cheese</h4>
+                            <h1>BURGER </h1>
+                            <p>With Free Cocacola. Stay home , we deliver</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-3" style="background-color: #000;">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/2.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h3>Enjoy 30% CashBack</h3>
+                            <span>Up to $70 on all Bikash</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-4" style="background-color: #F8F7F2;">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/3.png' %}" alt="img">
+                        <div class="wrap-details text-center">
+                            <h3><span>25 EXTRA</span>
+                                FREE ON KFC</h3>
+                            <p>Stay home , we deliver</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 align-self-center">
+                    <div class="single-offer-wrap single-offer-wrap-5" style="background: #39251D">
+                        <img class="bg-img" src="{% static 'app/assets/img/home-2/offer/4.png' %}" alt="img">
+                        <div class="wrap-details">
+                            <h5>Test with</h5>
+                            <h3><span>JAPANESE</span>FOOD AT HOME</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+     <!-- product Area Start-->
+     <section class="product-area pd-bottom-90">
+      <div class="container">
+          <div class="row justify-content-center">
+              <div class="col-12">
+                  <div class="section-title text-center">
+                      <h3 class="sub-title">Our Menu</h3>
+                      <h2 class="title">Delicious Deals for Delicious Meals</h2>
+                  </div>
+                  <ul class="product-nav style-2 nav nav-pills" id="pills-tab" role="tablist">
+                     {% for category in categories %}
+                        <li class="nav-item" role="presentation">
+                           <button class="nav-link{% if forloop.first %} active{% endif %}" id="pills-{{ category.name }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ category.name }}" type="button" role="tab" aria-controls="pills-ramen" aria-selected="true"><img src="{{ category.icon.url }}" alt="{{ category.name }}" width='32px'>{{ category.name|upper }}</button>
+                        </li>
+                     {% endfor %}
+                     
+          
+                  </ul>
+              </div>
+          </div>
+          <div class="tab-content" id="pills-tabContent">
+
+               
+         
+         
+            {% for category, goods in goods_by_category.items %}
+               <div class="tab-pane fade{% if forloop.first %} show active{% endif %}" id="pills-{{ category.name }}" role="tabpanel" aria-labelledby="pills-{{ category.name }}-tab">
+                     <div class="row justify-content-center">
+                        {% for good in goods %}
+                           <div class="col-xl-3 col-lg-4 col-md-6">
+                              <div class="single-item-wrap style-2">
+                                    <div class="thumb">
+                                       <img src="assets/img/home-2/product/01.png" alt="img">
+                                       <a class="fav-btn" href="#"><i class="ri-heart-fill"></i></a>
+                                    </div>
+                                    <div class="wrap-details">
+                                       <h5><a href="single-product.html">Double Burger</a></h5>
+                                       <div class="wrap-footer">
+                                          <div class="rating">
+                                                4.9
+                                                <span class="rating-inner">
+                                                   <i class="ri-star-fill ps-0"></i>
+                                                   <i class="ri-star-fill"></i>
+                                                   <i class="ri-star-fill"></i>
+                                                   <i class="ri-star-fill"></i>
+                                                   <i class="ri-star-half-line pe-0"></i>
+                                                </span>
+                                                (200)
+                                          </div>
+                                       </div> 
+                                       <div class="btn-area">
+                                          <h6 class="price">$17.00</h6>
+                                          <a class="btn btn-secondary" href="single-product.html">Add to cart <i class="ri-add-line"></i></a>         
+                                       </div>                                        
+                                    </div>
+                              </div>
+                           </div>
+                        {% endfor %}
+                     </div>
+               </div>
+            {% endfor %}
+               
+               
+            
+            
+
+      </div>
+  </section>
+  <!-- product Area End -->
+
+
+    {% endblock content %}
+
+
+
+
+
+
+    
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FoodKa - Food Ordering, Delivery & Restuarent Template</title>
+    <!--fivicon icon-->
+    <link rel="icon" href="assets/img/fevicon.png">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/css/animate.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/magnific.min.css">
+    <link rel="stylesheet" href="assets/css/nice-select.min.css">
+    <link rel="stylesheet" href="assets/css/owl.min.css">
+    <link rel="stylesheet" href="assets/css/slick-slide.min.css">
+    <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="assets/css/remixicon/remixicon.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+    <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Bebas+Neue&family=Satisfy&family=Quattrocento:wght@400;700&display=swap" rel="stylesheet">
+
+
+</head>
+<body class='sc5'>
+    <!-- preloader area start -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-inner">
+            <div id="wave1">
+            </div>
+            <div class="spinner">
+                <div class="dot1"></div>
+                <div class="dot2"></div>
+            </div>
+        </div>
+    </div>
+    <!-- preloader area end -->
+    <!-- search popup area start -->
+    <div class="body-overlay" id="body-overlay"></div>
+    <div class="td-search-popup" id="td-search-popup">
+        <form action="index.html" class="search-form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search.....">
+            </div>
+            <button type="submit" class="submit-btn"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <!-- //. search Popup -->
+
+    <!-- navbar start -->
+    <header class="navbar-area">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container nav-container">
+                <div class="responsive-mobile-menu">
+                    <button class="menu toggle-btn d-block d-lg-none" data-target="#themefie_main_menu" 
+                    aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-left"></span>
+                        <span class="icon-right"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="themefie_main_menu">
+                    <ul class="navbar-nav menu-open">
+                        <li class="current-menu-item menu-item-has-children">
+                            <a href="home-1.html">HOME</a>
+                            <ul class="sub-menu ps-0">
+                                <li><a href="home-1.html">Home 01</a></li>
+                                <li><a href="home-2.html">Home 02</a></li>
+                                <li><a href="home-3.html">Home 03</a></li>
+                            </ul>
+                        </li>
+                        <li class="current-menu-item menu-item-has-children">
+                            <a href="#">PAGES</a>
+                            <ul class="sub-menu ps-0">
+                                <li><a href="about.html">About</a></li>
+                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="blog-details.html">Blog Details</a></li>
+                                <li><a href="menu.html">Menu</a></li>
+                                <li><a href="menu-list.html">Menu List</a></li>
+                                <li><a href="shop.html">Shop</a></li>
+                                <li><a href="single-product.html">Shop Details</a></li>
+                                <li><a href="cart.html">Cart</a></li>
+                                <li><a href="checkout.html">Checkout</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="about.html">ABOUT US</a>
+                        </li>
+                        <li>
+                            <a href="contact.html">CONTACTS</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="logo">
+                    <a class="main-logo" href="home-1.html"><img src="assets/img/logo.png" alt="img"></a>
+                </div>
+                <div class="nav-right-part nav-right-part-mobile">
+                    <ul>
+                        <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                        </li>
+                        <li class="phone-contact d-md-block d-none"><i class="ri-phone-fill float-start"></i>
+                            +997 509 153 849
+                        </li>
+                        <li class="menu-cart"><a href="cart.html">CART <span>1</span></a></li>
+                        <li>49.50 $</li>
+                    </ul>
+                </div>
+                <div class="nav-right-part nav-right-part-desktop">                    
+                    <ul>
+                        <li><a class="search" href="#"><i class="ri-search-line"></i></a>
+                        </li>
+                        <li class="phone-contact"><i class="ri-phone-fill float-start"></i>
+                            +997 509 153 849
+                        </li>
+                        <li class="menu-cart"><a href="cart.html">CART <span>1</span></a></li>
+                        <li>49.50 $</li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- navbar end -->
+
+    

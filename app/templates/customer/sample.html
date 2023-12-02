@@ -1,0 +1,171 @@
+{% if  object.shipping_address is None %}
+
+{%  elif object is not None and distance.distance.text|slice:':-2'|mul:25 < 300.00  %}
+
+
+
+               <!-- place below the html form -->
+         <script>
+                     
+                  function payWithPaystack() {
+
+                     var handler = PaystackPop.setup({ 
+                        key: 'pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa', //put your public key here pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa
+                        email: '{{ object.user.email }}', //put your customer's email here
+                        
+                        {% with alpha=400 beta=object.get_tax_total|floatformat:1  %}
+                                       
+                           amount: {{ alpha|addition:beta|floatformat:0 }} * 100,
+
+                        {% endwith %}
+                                 
+                              
+                  
+                           
+
+
+                        currency: "NGN",
+                        ref: "{{ object.ref_code }}", // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                        firstname: '{{ object.user.first_name }}',
+                        lastname: '{{ object.user.last_name }}',
+                        
+                        onClose: function(){
+
+                           window.location.replace("{% url 'customer:failed-payment' %}");
+                           
+                        },
+                        metadata: {
+                           custom_fields: [
+                              {
+                                 display_name: "{{  object.user.first_name }}",
+                                 variable_name: "{{  object.user.last_name  }}",
+                                 value: "{{  object.user.get_full_name }}"
+                              }
+                           ]
+                        },
+
+                     
+
+
+                     callback: function(response){
+                        alert('success. transaction ref is ' + response.reference);
+
+                        {% with alpha=400 beta=object.get_tax_total|floatformat:1  %}
+                                       
+                       
+
+                        window.location.replace("{% url 'customer:verify-payment' alpha|addition:beta|floatformat:0 %}?ref="+response.reference);
+
+
+                     
+                        {% endwith %}
+                                                                                    
+                          
+
+                     },
+                        
+                        
+                     });
+                     handler.openIframe(); //open the paystack's payment modal
+                  }
+
+
+               let button = document.getElementById("payment-submit")
+               let input = document.getElementById("id_shipping_address")
+               input.addEventListener("input", function(e) {
+                  if(input.value.length == 0) {
+                  button.disabled = true
+               } else {
+                  button.disabled = false
+               }
+               })
+               
+
+
+
+         </script>
+
+
+{% else %}
+      
+
+
+                                
+
+      
+
+
+               <!-- place below the html form -->
+               <script>
+                     
+                  function payWithPaystack() {
+
+                     var handler = PaystackPop.setup({ 
+                        key: 'pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa', //put your public key here pk_test_2f03085981d28c257ee9909c2d199eef4962bfaa
+                        email: '{{ object.user.email }}', //put your customer's email here
+                        
+                        {% with alpha=400 beta=object.get_tax_total|floatformat:1  %}
+                                       
+                           amount: {{ alpha|addition:beta|floatformat:0 }} * 100,
+
+                        {% endwith %}
+
+                        currency: "NGN",
+                        ref: "{{ object.ref_code }}", // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                        firstname: '{{ object.user.first_name }}',
+                        lastname: '{{ object.user.last_name }}',
+                        
+                        onClose: function(){
+
+                           window.location.replace("{% url 'customer:failed-payment' %}");
+                           
+                        },
+                        metadata: {
+                           custom_fields: [
+                              {
+                                 display_name: "{{  object.user.first_name }}",
+                                 variable_name: "{{  object.user.last_name  }}",
+                                 value: "{{  object.user.get_full_name }}"
+                              }
+                           ]
+                        },
+
+                     
+
+
+                     callback: function(response){
+                        alert('success. transaction ref is ' + response.reference);
+
+                        {% with alpha=400 beta=object.get_tax_total|floatformat:1  %}
+                                       
+                       
+
+                        window.location.replace("{% url 'customer:verify-payment' alpha|addition:beta|floatformat:0 %}?ref="+response.reference);
+
+
+                     
+                        {% endwith %}
+                                                                                    
+                          
+
+                     },
+                        
+                        
+                     });
+                     handler.openIframe(); //open the paystack's payment modal
+               }
+
+
+
+        </script>
+
+
+
+
+
+
+
+
+          
+{% endif %}
+

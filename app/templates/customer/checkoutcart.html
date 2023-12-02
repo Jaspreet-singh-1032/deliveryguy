@@ -1,0 +1,39 @@
+{% load humanize %}
+{% load cart_template_tags %}
+
+
+
+     
+        
+
+
+            <div class="sidebar-area">
+                <div class="order-area">
+                    <h5 class="title">Your order {{ request.user|cart_item_count }} items</h5>
+                    {% for order_item in object.items.all %}
+                        <div class="order-product">
+                            <div class="thumb">
+                                <img src="{{ order_item.item.image.url }}" alt="img">
+                            </div>
+                            <div class="details">
+                                <h6>{{ order_item.item.name|title }} </h6>
+                                <ul>
+                                    <li><span>Price/Quanlity: </span>₦{{ order_item.item.price|floatformat:2|intcomma }}X {{ order_item.quantity}} =  ₦{{ order_item.get_total_item_price|floatformat:2|intcomma }}</li>
+                                    <li><span>Quanlity: </span>{{ order_item.quantity}}</li>
+                                </ul>
+
+                            
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <ul class="amount">
+                        <li>Subtotal<span>₦{{ object.get_total_without_tax|floatformat:2|intcomma }}</span></li>
+                        <li class="total">Total<span>₦{{ object.get_tax_total|floatformat:2|intcomma }}</span></li>
+                    </ul>
+                    
+                    <a class="btn btn-secondary w-100" href="{% url 'customer:order-summary' %}"> PLACE ORDER</a>
+
+                </div> 
+            </div>
+
+      
