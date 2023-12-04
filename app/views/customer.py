@@ -708,7 +708,7 @@ def OrderSummaryView(request, get_total, total_plugin, total_package):
             pass
            
             if  order.shipping_address is not None:
-                distance = gmaps.distance_matrix('Iya Oyo Amala, 112 Idris Gidado St, Wuye 900108, Ankuru, Federal Capital Territory', order.shipping_address)['rows'][0]['elements'][0]
+                distance = gmaps.distance_matrix(conf_settings.ORDER_ORIGIN_ADDRESS, order.shipping_address)['rows'][0]['elements'][0]
 
     
     except Order.DoesNotExist:
@@ -751,7 +751,7 @@ def OrderSummaryView(request, get_total, total_plugin, total_package):
             order.save()
             messages.info(request, "The Detail have Been Updated")
             return redirect(request.META['HTTP_REFERER']) 
-        
+        context['form'] = form
 
  
 

@@ -4,8 +4,13 @@ from django.forms.utils import ValidationError
 from app.models import *
 from  django.contrib.auth.forms import  UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField, PasswordResetForm
 from django.forms import (formset_factory, modelformset_factory)
+from django.conf import settings as conf_settings
 # File: forms.py
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
+
+import googlemaps 
+
+gmaps = googlemaps.Client(key=conf_settings.GOOGLE_API)  
 
 
 class CustomerSignUpForm(UserCreationForm):
@@ -204,6 +209,14 @@ class CheckoutForm(forms.ModelForm):
     location = forms.ModelChoiceField(queryset=Location.objects.filter(), label="Select Your Location", empty_label="...Select location", required=True, blank=False, widget=forms.Select(attrs={'class': 'form-control select2'}))
     #phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', placeholder='Enter Your Address', error_message = ("Phone number must be entered in the format: '+999999999'. Up to 15 digits is allowed."))
     phone_number = forms.RegexField(regex=r'^\+?1?\d{9,15}$', widget=forms.TextInput(attrs=dict(required=True, max_length=15, placeholder='Enter Your Phone Number +234800008888', )), label=("Contact Phonenumber"),  error_messages={'invalid': ("Phone number must be entered in the format: '+999999999'. Up to 15 digits is allowed.")})
+
+    def clean_shipping_address(self):
+        cleanded_data = self.clean()
+        shipping_address = cleanded_data['shipping_address']
+        distance = gmaps.distance_matrix(conf_settings.ORDER_ORIGIN_ADDRESS, shipping_address)['rows'][0]['elements'][0]
+        if distance['status'] != 'OK':
+            self.add_error('shipping_address', 'Please enter a valid address!')
+        return shipping_address
 
 
     class Meta:

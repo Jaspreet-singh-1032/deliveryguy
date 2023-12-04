@@ -365,3 +365,5 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 GOOGLE_API_KEY = "AIzaSyBIZxAYc-dBoG9Qvc21E_eV14aahvjkJ0U"  
+
+ORDER_ORIGIN_ADDRESS = "Iya Oyo Amala, 112 Idris Gidado St, Wuye 900108, Ankuru, Federal Capital Territory"
