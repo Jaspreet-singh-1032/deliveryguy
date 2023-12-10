@@ -174,25 +174,9 @@
                                                    
                                                     <div class="details">
                                                        
-                                                        {% if ad.total_quantity == 0 %}
-
-                                                       
-                                                            <h6>{{ ad.food_name|upper }} | ₦{{ ad.food_price }} <span style="color: red; font-size: 12px"><a  class="button" hx-target="#main" hx-post="{% url 'app:add-to-cart-plugin' ad.food_pk order_item.item.pk %}"> ADD TO CART </a></span></h6>
-                                                        
-                                                      
-
-                                                        {% else %}
-                                                            
-                                                                <h6>{{ ad.food_name|upper }} ₦{{ ad.food_price }} </h6>
-                                                            
-                                                           
-                                                                <div class="quantity1 buttons_added">
-                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:minus-to-cart-plugin' ad.food_pk order_item.item.pk %}"><input type="button" value="-" class="minus" style="color: #fff"></a>
-                                                                    <input type="number" class="input-text qty text"  name="quantity" value="{{ ad.total_quantity }}" style="color: #fff">
-                                                                    <a hx-target="#main" class="button"  hx-post="{% url 'customer:add-to-cart-plugin' ad.food_pk order_item.item.pk %}"><input type="button" value="+" class="plus" style="color: #fff"></a>
-                                                                    <a hx-target="#main" class="button"  hx-delete="{% url 'customer:plugin-delete-item' ad.food_pk order_item.item.pk %}"><input type="button" value="X" class="delete" style="color: #fff"></a>
-                                                                </div>
-                                                        {% endif %}
+                                                        <div id="id_item_and_quantity_manager">
+                                                            {% include "general/item_and_quantity_manager.html" with good_pk=order_item.item.pk plugin_food_pk=ad.food_pk total_quantity=ad.total_quantity food_name=ad.food_name food_price=ad.food_price %}
+                                                        </div>
                                                             
                                                        
                                                         

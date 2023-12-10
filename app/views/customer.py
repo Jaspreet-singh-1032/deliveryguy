@@ -242,18 +242,23 @@ def add_to_cart_plugin(request, pk, food_pk):
         if order.plugin.filter(item__pk=item.pk, foods__id=food.pk).exists():
             order_item.quantity += 1
             order_item.save()
-            return redirect(request.META['HTTP_REFERER'])  
           
         else:
             order.plugin.add(order_item)
-            return redirect(request.META['HTTP_REFERER'])
            
     else:
         ordered_date = timezone.now()
         order = OrderItem.objects.create(user=request.user, ordered_date=ordered_date)
         order.plugin.add(order_item)
-        return redirect(request.META['HTTP_REFERER']) 
 
+    context = {
+        "good_pk": food.pk,
+        "plugin_food_pk": item.pk,
+        "total_quantity": order_item.quantity,
+        'food_name': item.name,
+        'food_price': item.price
+    }
+    return render(request, 'general/item_and_quantity_manager.html', context=context)
 
 
 
@@ -498,20 +503,24 @@ def minus_to_cart_plugin(request, pk, food_pk):
                 order_item.quantity -= 1
                 order_item.full_clean()
                 order_item.save()
-                return redirect(request.META['HTTP_REFERER']) 
             else:
                 order.plugin.add(order_item)
-                return redirect(request.META['HTTP_REFERER']) 
-    
         except ValidationError:
-            return redirect(request.META['HTTP_REFERER']) 
+            pass
             
             
     else:
         ordered_date = timezone.now()
         order = OrderItem.objects.create(user=request.user, ordered_date=ordered_date)
         order.plugin.add(order_item)
-        return redirect(request.META['HTTP_REFERER']) 
+    context = {
+        "good_pk": food.pk,
+        "plugin_food_pk": item.pk,
+        "total_quantity": order_item.quantity,
+        'food_name': item.name,
+        'food_price': item.price
+    }
+    return render(request, 'general/item_and_quantity_manager.html', context=context)
 
 
 @require_http_methods(['DELETE'])
@@ -542,14 +551,14 @@ def remove_from_cart_plugin(request, pk, food_pk):
             )[0]
             order.plugin.remove(order_item)
             order_item.delete()
-            #messages.info(request, "Item Has Been Minus from to your cart")
-            return redirect(request.META['HTTP_REFERER']) 
-        else:
-            #messages.info(request, "Item Has Been Minus from to your cart")
-            return redirect(request.META['HTTP_REFERER']) 
-    else:
-        #messages.info(request, "Item Has Been Minus from to your cart")
-        return redirect(request.META['HTTP_REFERER']) 
+    context = {
+        "good_pk": food.pk,
+        "plugin_food_pk": item.pk,
+        "total_quantity": 0,
+        'food_name': item.name,
+        'food_price': item.price
+    }
+    return render(request, 'general/item_and_quantity_manager.html', context=context)
 
 
 
